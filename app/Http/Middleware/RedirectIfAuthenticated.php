@@ -21,10 +21,10 @@ class RedirectIfAuthenticated
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
                 $user = Auth::guard($guard)->user();
-                if ($user->role === RoleEnum::ADMIN) {
-                    return redirect('/');
+                if ($user->role === RoleEnum::ADMIN || $user->role === RoleEnum::INSTRUCTOR) {
+                    return redirect(route('admin.dashboard.index'));
                 }
-                return redirect('/' . $user->id);
+                return redirect(route('user.home.index'));
             }
         }
     return $next($request);

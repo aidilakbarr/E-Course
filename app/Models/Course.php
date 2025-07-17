@@ -12,30 +12,58 @@ class Course extends Model
     use HasFactory;
 
     protected $keyType = 'string';
-    public $incrementing = false;
-
-      protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (!$model->getKey()) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
-    }
     protected $fillable = [
         'thumbnail',
         'title',
         'description',
-        'teacher',
-        'start_on',
-        'ends_on',
-        'kuota',
+        'instructor_id',
         'status'
     ];
 
     protected $casts =[
         'status' => StatusCourseEnum::class
     ];
+
+     public function instructor()
+    {
+        return $this->belongsTo(User::class, 'instructor_id');
+    }
+
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class);
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
+    }
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
+    function getThumbnailUrlAttribute(){
+        return asset('storage/'. $this->thumbnail);
+    }
+
+public function scopeSearch($query, ?string $search)
+{
+    if ($search) {
+        $query->where('title', 'like', '%' . $search . '%');
+    }
+
+    return $query;
+}
+
+public function scopeByRole($query)
+{
+    $user = auth()->user();
+
+    return $user->isAdmin()
+        ? $query
+        : $query->where('instructor_id', $user->id);
+}
+
 }

@@ -13,11 +13,20 @@ class TableController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::where('id', '!=', auth()->id())->get();
-return view('admin.table.index', compact('users'));
+        $query = User::query();
 
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $users = $query->paginate(10)->withQueryString();
+
+        return view('admin.table.index', compact('users'));
     }
 
     /**

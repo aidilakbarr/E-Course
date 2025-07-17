@@ -24,16 +24,12 @@ class StoreCourseRequest extends FormRequest
 public function rules(): array
 {
     //    dd($this->all());
-    $isUpdate = $this->method() === 'PUT' || $this->method() === 'PATCH';
 
     return [
         'thumbnail'   => 'sometimes|image|mimes:jpeg,png,jpg,webp|max:2048',
         'title'       => 'required|string|max:255',
         'description' => 'nullable|string',
-        'teacher'  => 'required',
-        'start_on'  => 'required|date|after_or_equal:today',
-        'ends_on'    => 'required|date|after:start_date',
-        'kuota'       => 'required|integer|min:1',
+        'instructor'  => 'nullable|exists:users,id',
         'status'      =>  [
                 'required',
                 Rule::in(array_column(StatusCourseEnum::cases(), 'value'))

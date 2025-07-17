@@ -19,7 +19,7 @@
                         @csrf
                         @method('PUT')
 
-                        <div x-data="{ preview: '{{ Auth::user()->profile ? asset('storage/' . Auth::user()->profile) : asset('images/default-profile.png') }}' }" class="text-center">
+                        <div x-data="{ preview: '{{ Auth::user()->profile_url }}' }" class="text-center">
                             <input type="file" id="upload_profile" name="profile" class="hidden"
                                 @change="if($event.target.files[0]) { 
                     const reader = new FileReader(); 

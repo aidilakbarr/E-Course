@@ -14,21 +14,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    public $incrementing = false;
     protected $keyType = 'string';
     protected $table = 'users';
 
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (!$model->getKey()) {
-                $model->{$model->getKeyName()} = (string) Str::uuid();
-            }
-        });
-    }
     protected $fillable = [
         'name',
         'profile',
@@ -36,6 +24,26 @@ class User extends Authenticatable
         'password',
         'role',
     ];
+
+    public function coursesTaught()
+    {
+        return $this->hasMany(Course::class, 'instructor_id');
+    }
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'student_id');
+    }
+
+    public function submissions()
+    {
+        return $this->hasMany(Submission::class, 'student_id');
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -58,8 +66,9 @@ class User extends Authenticatable
         'role' => RoleEnum::class,
     ];
 
-    protected $attributes = [
-    'role' => RoleEnum::USER,
-];
-
+    public function getProfileUrlAttribute(){
+        return $this->profile
+        ? asset('storage/' . $this->profile)
+        : default_profile_image();
+    }
 }

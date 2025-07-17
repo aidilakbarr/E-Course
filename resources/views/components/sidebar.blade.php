@@ -5,16 +5,17 @@
     </div>
     <nav class="text-white text-base font-semibold pt-3">
 
-        <x-nav-link href="/" icon="fa-tachometer-alt" :active="request()->routeIs('admin.dashboard.index')">
+        <x-nav-link href="{{ route('admin.dashboard.index') }}" icon="fa-tachometer-alt" :active="request()->routeIs('admin.dashboard.index')">
             Dashboard
         </x-nav-link>
 
-        <x-nav-link href="/table" icon="fa-table" :active="request()->routeIs('table.index')">
-            Users
-        </x-nav-link>
-
-        <x-nav-link href="/course" icon="fa-align-left" :active="request()->routeIs('course.index')">
-            Courses
+        @if (auth()->user()->role === \App\Enums\RoleEnum::ADMIN)
+            <x-nav-link href="{{ route('table.index') }}" icon="fa-table" :active="request()->routeIs('table.index')">
+                Users
+            </x-nav-link>
+        @endif
+        <x-nav-link href="{{ route('courses.index') }}" icon="fa-align-left" :active="request()->routeIs('course.index')">
+            {{ auth()->user()->role === \App\Enums\RoleEnum::ADMIN ? 'Courses' : 'My Courses' }}
         </x-nav-link>
 
     </nav>

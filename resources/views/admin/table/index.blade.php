@@ -8,14 +8,25 @@
             <p class="text-xl pb-3 flex items-center">
                 <i class="fas fa-list mr-3"></i> Table User
             </p>
-            <a href="table/create">
-                <button
-                    class="bg-[#3d68ff] font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-[#3a4e94] flex items-center justify-center px-6 text-white cursor-pointer">
-                    <i class="fas fa-plus mr-3 text-white"></i> New User
-                </button>
-            </a>
-            <div class="bg-white overflow-auto">
-                <table class="min-w-full leading-normal">
+            <div class="overflow-auto">
+                <div class="flex justify-between my-4">
+                    <a href="table/create">
+                        <button
+                            class="bg-[#3d68ff] font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-[#3a4e94] flex items-center justify-center px-6 text-white cursor-pointer">
+                            <i class="fas fa-plus mr-3 text-white"></i> New User
+                        </button>
+                    </a>
+                    <form action="{{ route('table.index') }}" method="GET">
+                        <input type="text" name="search" value="{{ request('search') }}"
+                            placeholder="Cari user atau email..." class="border px-4 py-2 rounded" />
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ml-2">
+                            Cari
+                        </button>
+                    </form>
+
+                </div>
+
+                <table class="bg-white min-w-full leading-normal">
                     <thead>
                         <tr>
                             <th
@@ -53,8 +64,7 @@
                                     <td class="px-5 py-2 border-b border-gray-200 bg-white text-sm">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 w-10 h-10">
-                                                <img class="w-full h-full rounded-full"
-                                                    src="{{ $user->profile ? asset('storage/' . $user->profile) : asset('images/default-profile.png') }}"
+                                                <img class="w-full h-full rounded-full" src="{{ $user->profile_url }}"
                                                     alt="" />
                                             </div>
                                             <div class="ml-3">
@@ -83,7 +93,7 @@
                                     <td class="flex w-full justify-center gap-4 items-center  py-2">
                                         <a href="table/{{ $user->id }}/edit">
                                             <button
-                                                class="bg-[#3d68ff] font-semibold py-2 rounded-lg shadow-lg hover:shadow-xl hover:bg-[#3a4e94] flex items-center justify-center px-6 text-white cursor-pointer">
+                                                class="bg-yellow-400 hover:bg-yellow-500 font-semibold py-2 rounded-lg shadow-lg hover:shadow-xl flex items-center justify-center px-6 text-white cursor-pointer">
                                                 <i class="fas fa-edit mr-3"></i> Edit User
                                             </button>
                                         </a>
@@ -105,6 +115,10 @@
 
                                 </tr>
                             @endforeach
+                            <div class="mt-4">
+                                {{ $users->links() }}
+                            </div>
+
                         @endif
                     </tbody>
                 </table>

@@ -11,17 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('courses', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('thumbnail');
-            $table->string('title');
-            $table->text('description')->nullable();
-            $table->string('Teacher');
-            $table->date("start_on");
-            $table->date('ends_on');
-            $table->integer('kuota');
-            $table->string('status')->default('AKTIF');
-            $table->timestamps();
+        Schema::create('courses', callback: function (Blueprint $table) {
+             $table->id();
+    $table->foreignId('instructor_id')->nullable()->constrained('users')->nullOnDelete();
+    $table->string('title', 150);
+    $table->text('description')->nullable();
+    $table->string('thumbnail')->nullable();
+    $table->enum('status', ['AKTIF', 'NONAKTIF'])->default('AKTIF');
+    $table->timestamps();
         });
     }
 

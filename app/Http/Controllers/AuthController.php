@@ -20,7 +20,7 @@ class AuthController extends Controller
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
             $user = Auth::user();
-            if ($user->role === RoleEnum::ADMIN) {
+            if ($user->role === RoleEnum::ADMIN || $user->role === RoleEnum::INSTRUCTOR) {
                 return redirect()->intended(route('admin.dashboard.index'));
             } else {
                 return redirect()->intended(route('user.home.index'));
@@ -39,7 +39,7 @@ class AuthController extends Controller
     public function register(RegisterUserRequest $request) {
         $user = User::create($request->validated());
         Auth::login($user);
-        return redirect($user->id );
+        return redirect(route('user.home.index') );
     }
 
     public function logout(request $request){

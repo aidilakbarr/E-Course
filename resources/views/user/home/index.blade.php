@@ -10,13 +10,12 @@
             <div class="row justify-content-center fullscreen align-items-center">
                 <div class="col-lg-5 col-md-8 home-banner-left">
                     <h1 class="text-white">
-                        Take the first step <br />
-                        to learn with us
+                        Belajar Lebih Mudah,
+                        Kapan Saja, Di Mana Saja
                     </h1>
                     <p class="mx-auto text-white mt-20 mb-40">
-                        In the history of modern astronomy, there is probably no one
-                        greater leap forward than the building and launch of the space
-                        telescope known as the Hubble.
+                        Platform e-learning interaktif yang membantumu berkembang dengan materi terbaru, mentor
+                        berpengalaman, dan akses tanpa batas.
                     </p>
                 </div>
                 <div class="offset-lg-2 col-lg-5 col-md-12 home-banner-right">
@@ -35,10 +34,10 @@
                     <div class="feature-item d-flex">
                         <i class="ti-book"></i>
                         <div class="ml-20">
-                            <h4>New Classes</h4>
+                            <h4>Kelas Terbaru</h4>
                             <p>
-                                In the history of modern astronomy, there is probably no one
-                                greater leap forward.
+                                Akses berbagai kelas terbaru dengan materi yang selalu diperbarui dan sesuai kebutuhan
+                                industri.
                             </p>
                         </div>
                     </div>
@@ -47,10 +46,10 @@
                     <div class="feature-item d-flex">
                         <i class="ti-cup"></i>
                         <div class="ml-20">
-                            <h4>Top Courses</h4>
+                            <h4>Kursus Unggulan</h4>
                             <p>
-                                In the history of modern astronomy, there is probably no one
-                                greater leap forward.
+                                Pilih dari deretan kursus paling populer dan favorit, diajarkan oleh instruktur
+                                berpengalaman.
                             </p>
                         </div>
                     </div>
@@ -59,10 +58,9 @@
                     <div class="feature-item d-flex border-right-0">
                         <i class="ti-desktop"></i>
                         <div class="ml-20">
-                            <h4>Full E-Books</h4>
+                            <h4>E-Book Lengkap</h4>
                             <p>
-                                In the history of modern astronomy, there is probably no one
-                                greater leap forward.
+                                Dapatkan akses ke e-book pendukung pembelajaran yang lengkap, praktis, dan mudah dipahami.
                             </p>
                         </div>
                     </div>
@@ -70,6 +68,7 @@
             </div>
         </div>
     </section>
+
     <!-- ================ End Feature Area ================= -->
 
     <!-- ================ Start Popular Course Area ================= -->
@@ -78,12 +77,12 @@
             <div class="row justify-content-center section-title">
                 <div class="col-lg-12">
                     <h2>
-                        Popular Courses <br />
-                        Available Right Now
+                        Kursus Populer <br />
+                        Tersedia Saat Ini
                     </h2>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                        eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        Pilih dari berbagai kursus unggulan kami yang dirancang untuk membantu Anda belajar secara efektif
+                        dan fleksibel.
                     </p>
                 </div>
             </div>
@@ -94,31 +93,21 @@
                     </div>
                     <div class="details">
                         <div class="d-flex justify-content-between mb-20">
-                            <p class="name">programming language</p>
-                            <p class="value">$150</p>
+                            <p class="name">Bahasa Pemrograman</p>
+                            <p class="value">Rp2.250.000</p>
                         </div>
                         <a href="#">
-                            <h4>Learn Angular JS Course for Legendary Persons</h4>
+                            <h4>Pelajari Kursus Angular JS untuk Tingkat Lanjut</h4>
                         </a>
                         <div class="bottom d-flex mt-15">
                             <ul class="list">
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
                             </ul>
-                            <p class="ml-20">25 Reviews</p>
+                            <p class="ml-20">25 Ulasan</p>
                         </div>
                     </div>
                 </div>
@@ -129,107 +118,198 @@
                     </div>
                     <div class="details">
                         <div class="d-flex justify-content-between mb-20">
-                            <p class="name">programming language</p>
-                            <p class="value">$150</p>
+                            <p class="name">Bahasa Pemrograman</p>
+                            <p class="value">Rp2.250.000</p>
                         </div>
                         <a href="#">
-                            <h4>Learn Angular JS Course for Legendary Persons</h4>
+                            <h4>Pelajari Kursus Angular JS untuk Tingkat Lanjut</h4>
                         </a>
                         <div class="bottom d-flex mt-15">
                             <ul class="list">
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
                             </ul>
-                            <p class="ml-20">25 Reviews</p>
+                            <p class="ml-20">25 Ulasan</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-popular-course">
+                    <div class="thumb">
+                        <img class="f-img img-fluid mx-auto" src="img/popular-course/p2.jpg" alt="" />
+                    </div>
+                    <div class="details">
+                        <div class="d-flex justify-content-between mb-20">
+                            <p class="name">Bahasa Pemrograman</p>
+                            <p class="value">Rp2.250.000</p>
+                        </div>
+                        <a href="#">
+                            <h4>Pelajari Kursus Angular JS untuk Tingkat Lanjut</h4>
+                        </a>
+                        <div class="bottom d-flex mt-15">
+                            <ul class="list">
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                            </ul>
+                            <p class="ml-20">25 Ulasan</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-popular-course">
+                    <div class="thumb">
+                        <img class="f-img img-fluid mx-auto" src="img/popular-course/p2.jpg" alt="" />
+                    </div>
+                    <div class="details">
+                        <div class="d-flex justify-content-between mb-20">
+                            <p class="name">Bahasa Pemrograman</p>
+                            <p class="value">Rp2.250.000</p>
+                        </div>
+                        <a href="#">
+                            <h4>Pelajari Kursus Angular JS untuk Tingkat Lanjut</h4>
+                        </a>
+                        <div class="bottom d-flex mt-15">
+                            <ul class="list">
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                            </ul>
+                            <p class="ml-20">25 Ulasan</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-popular-course">
+                    <div class="thumb">
+                        <img class="f-img img-fluid mx-auto" src="img/popular-course/p2.jpg" alt="" />
+                    </div>
+                    <div class="details">
+                        <div class="d-flex justify-content-between mb-20">
+                            <p class="name">Bahasa Pemrograman</p>
+                            <p class="value">Rp2.250.000</p>
+                        </div>
+                        <a href="#">
+                            <h4>Pelajari Kursus Angular JS untuk Tingkat Lanjut</h4>
+                        </a>
+                        <div class="bottom d-flex mt-15">
+                            <ul class="list">
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                            </ul>
+                            <p class="ml-20">25 Ulasan</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-popular-course">
+                    <div class="thumb">
+                        <img class="f-img img-fluid mx-auto" src="img/popular-course/p2.jpg" alt="" />
+                    </div>
+                    <div class="details">
+                        <div class="d-flex justify-content-between mb-20">
+                            <p class="name">Bahasa Pemrograman</p>
+                            <p class="value">Rp2.250.000</p>
+                        </div>
+                        <a href="#">
+                            <h4>Pelajari Kursus Angular JS untuk Tingkat Lanjut</h4>
+                        </a>
+                        <div class="bottom d-flex mt-15">
+                            <ul class="list">
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                            </ul>
+                            <p class="ml-20">25 Ulasan</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-popular-course">
+                    <div class="thumb">
+                        <img class="f-img img-fluid mx-auto" src="img/popular-course/p2.jpg" alt="" />
+                    </div>
+                    <div class="details">
+                        <div class="d-flex justify-content-between mb-20">
+                            <p class="name">Bahasa Pemrograman</p>
+                            <p class="value">Rp2.250.000</p>
+                        </div>
+                        <a href="#">
+                            <h4>Pelajari Kursus Angular JS untuk Tingkat Lanjut</h4>
+                        </a>
+                        <div class="bottom d-flex mt-15">
+                            <ul class="list">
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                            </ul>
+                            <p class="ml-20">25 Ulasan</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-popular-course">
+                    <div class="thumb">
+                        <img class="f-img img-fluid mx-auto" src="img/popular-course/p2.jpg" alt="" />
+                    </div>
+                    <div class="details">
+                        <div class="d-flex justify-content-between mb-20">
+                            <p class="name">Bahasa Pemrograman</p>
+                            <p class="value">Rp2.250.000</p>
+                        </div>
+                        <a href="#">
+                            <h4>Pelajari Kursus Angular JS untuk Tingkat Lanjut</h4>
+                        </a>
+                        <div class="bottom d-flex mt-15">
+                            <ul class="list">
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                            </ul>
+                            <p class="ml-20">25 Ulasan</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="single-popular-course">
+                    <div class="thumb">
+                        <img class="f-img img-fluid mx-auto" src="img/popular-course/p2.jpg" alt="" />
+                    </div>
+                    <div class="details">
+                        <div class="d-flex justify-content-between mb-20">
+                            <p class="name">Bahasa Pemrograman</p>
+                            <p class="value">Rp2.250.000</p>
+                        </div>
+                        <a href="#">
+                            <h4>Pelajari Kursus Angular JS untuk Tingkat Lanjut</h4>
+                        </a>
+                        <div class="bottom d-flex mt-15">
+                            <ul class="list">
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                            </ul>
+                            <p class="ml-20">25 Ulasan</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="single-popular-course">
-                    <div class="thumb">
-                        <img class="f-img img-fluid mx-auto" src="img/popular-course/p3.jpg" alt="" />
-                    </div>
-                    <div class="details">
-                        <div class="d-flex justify-content-between mb-20">
-                            <p class="name">programming language</p>
-                            <p class="value">$150</p>
-                        </div>
-                        <a href="#">
-                            <h4>Learn Angular JS Course for Legendary Persons</h4>
-                        </a>
-                        <div class="bottom d-flex mt-15">
-                            <ul class="list">
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                            </ul>
-                            <p class="ml-20">25 Reviews</p>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="single-popular-course">
-                    <div class="thumb">
-                        <img class="f-img img-fluid mx-auto" src="img/popular-course/p4.jpg" alt="" />
-                    </div>
-                    <div class="details">
-                        <div class="d-flex justify-content-between mb-20">
-                            <p class="name">programming language</p>
-                            <p class="value">$150</p>
-                        </div>
-                        <a href="#">
-                            <h4>Learn Angular JS Course for Legendary Persons</h4>
-                        </a>
-                        <div class="bottom d-flex mt-15">
-                            <ul class="list">
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="fa fa-star"></i></a>
-                                </li>
-                            </ul>
-                            <p class="ml-20">25 Reviews</p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
+
     <!-- ================ End Popular Course Area ================= -->
 
     <!-- ================ Start Video Area ================= -->
@@ -239,13 +319,12 @@
                 <div class="col-lg-5">
                     <div class="section-title text-white">
                         <h2 class="text-white">
-                            Watch Our Trainers <br />
-                            in Live Action
+                            Saksikan Pelatih Kami <br />
+                            dalam Aksi Langsung
                         </h2>
                         <p>
-                            In the history of modern astronomy, there is probably no one
-                            greater leap forward than the building and launch of the space
-                            telescope known as the Hubble.
+                            Dapatkan pengalaman belajar yang lebih nyata dengan menyaksikan langsung bagaimana instruktur
+                            kami mengajar dan menjelaskan materi melalui video interaktif.
                         </p>
                     </div>
                 </div>
@@ -260,12 +339,11 @@
                                 </a>
                             </div>
                             <h4 class="text-white mb-20 mt-30">
-                                Learn Angular js Course for Legendary Persons
+                                Pelajari Kursus Angular JS dari Ahlinya
                             </h4>
                             <p class="text-white mb-20">
-                                In the history of modern astronomy, there is probably no one
-                                greater leap forward than the building and launch of the space
-                                telescope known as the Hubble.
+                                Tonton bagaimana instruktur kami menjelaskan konsep Angular JS secara praktis dan mudah
+                                dipahami, langsung dari layar Anda.
                             </p>
                         </div>
 
@@ -278,12 +356,11 @@
                                 </a>
                             </div>
                             <h4 class="text-white mb-20 mt-30">
-                                Learn Angular js Course for Legendary Persons
+                                Pelajari Kursus Angular JS dari Ahlinya
                             </h4>
                             <p class="text-white mb-20">
-                                In the history of modern astronomy, there is probably no one
-                                greater leap forward than the building and launch of the space
-                                telescope known as the Hubble.
+                                Tonton bagaimana instruktur kami menjelaskan konsep Angular JS secara praktis dan mudah
+                                dipahami, langsung dari layar Anda.
                             </p>
                         </div>
                     </div>
@@ -291,6 +368,7 @@
             </div>
         </div>
     </section>
+
     <!-- ================ End Video Area ================= -->
 
     <!-- ================ Start Feature Area ================= -->
@@ -300,96 +378,88 @@
                 <div class="col-lg-12">
                     <div class="section-title text-left">
                         <h2>
-                            Features That <br />
-                            Can Avail By Everyone
+                            Fitur yang <br />
+                            Bisa Diakses oleh Semua Orang
                         </h2>
                         <p>
-                            If you are looking at blank cassettes on the web, you may be
-                            very confused at the difference in price. You may see some for
-                            as low as $.17 each.
+                            Platform kami dirancang untuk mendukung pembelajaran siapa pun, kapan pun, dan di mana pun
+                            secara fleksibel dan efisien.
                         </p>
                     </div>
                 </div>
+
                 <div class="col-lg-4 col-md-6">
                     <div class="other-feature-item">
                         <i class="ti-key"></i>
-                        <h4>Lifetime Access</h4>
+                        <h4>Akses Seumur Hidup</h4>
                         <div>
                             <p>
-                                Lorem ipsum dolor sit amet consec tetur adipisicing elit, sed
-                                do eiusmod tempor incididunt labore. Lorem ipsum dolor sit
-                                amet consec tetur adipisicing elit, sed do eiusmod tempor
-                                incididunt labore.
+                                Nikmati akses ke semua materi pembelajaran selamanya, tanpa batas waktu atau biaya tambahan.
                             </p>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-lg-4 col-md-6 mt--160">
                     <div class="other-feature-item">
                         <i class="ti-files"></i>
-                        <h4>Source File Included</h4>
+                        <h4>File Sumber Disertakan</h4>
                         <div>
                             <p>
-                                Lorem ipsum dolor sit amet consec tetur adipisicing elit, sed
-                                do eiusmod tempor incididunt labore. Lorem ipsum dolor sit
-                                amet consec tetur adipisicing elit, sed do eiusmod tempor
-                                incididunt labore.
+                                Unduh file pendukung seperti kode program, modul, dan materi tambahan untuk praktik
+                                langsung.
                             </p>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-lg-4 col-md-6 mt--260">
                     <div class="other-feature-item">
                         <i class="ti-medall-alt"></i>
-                        <h4>Student Membership</h4>
+                        <h4>Keanggotaan Mahasiswa</h4>
                         <div>
                             <p>
-                                Lorem ipsum dolor sit amet consec tetur adipisicing elit, sed
-                                do eiusmod tempor incididunt labore. Lorem ipsum dolor sit
-                                amet consec tetur adipisicing elit, sed do eiusmod tempor
-                                incididunt labore.
+                                Dapatkan keuntungan eksklusif bagi pelajar dan mahasiswa, termasuk diskon kursus dan akses
+                                komunitas belajar.
                             </p>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-lg-4 col-md-6">
                     <div class="other-feature-item">
                         <i class="ti-briefcase"></i>
-                        <h4>35000+ Courses</h4>
+                        <h4>35.000+ Kursus</h4>
                         <div>
                             <p>
-                                Lorem ipsum dolor sit amet consec tetur adipisicing elit, sed
-                                do eiusmod tempor incididunt labore. Lorem ipsum dolor sit
-                                amet consec tetur adipisicing elit, sed do eiusmod tempor
-                                incididunt labore.
+                                Pilih dari ribuan kursus dalam berbagai bidang, mulai dari teknologi, bisnis, desain, hingga
+                                pengembangan diri.
                             </p>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-lg-4 col-md-6 mt--160">
                     <div class="other-feature-item">
                         <i class="ti-crown"></i>
-                        <h4>Expert Mentors</h4>
+                        <h4>Mentor Ahli</h4>
                         <div>
                             <p>
-                                Lorem ipsum dolor sit amet consec tetur adipisicing elit, sed
-                                do eiusmod tempor incididunt labore. Lorem ipsum dolor sit
-                                amet consec tetur adipisicing elit, sed do eiusmod tempor
-                                incididunt labore.
+                                Belajar langsung dari para mentor profesional dan praktisi industri berpengalaman di
+                                bidangnya.
                             </p>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-lg-4 col-md-6 mt--260">
                     <div class="other-feature-item">
                         <i class="ti-headphone-alt"></i>
-                        <h4>Live Supports</h4>
+                        <h4>Dukungan Langsung</h4>
                         <div>
                             <p>
-                                Lorem ipsum dolor sit amet consec tetur adipisicing elit, sed
-                                do eiusmod tempor incididunt labore. Lorem ipsum dolor sit
-                                amet consec tetur adipisicing elit, sed do eiusmod tempor
-                                incididunt labore.
+                                Tim kami siap membantu Anda melalui live chat atau email kapan saja saat Anda membutuhkan
+                                bantuan belajar.
                             </p>
                         </div>
                     </div>
@@ -397,12 +467,14 @@
             </div>
         </div>
     </section>
+
     <!-- ================ End Feature Area ================= -->
 
     <!-- ================ Start Testimonials Area ================= -->
     <section class="testimonials-area section-gap">
         <div class="container">
             <div class="testi-slider owl-carousel" data-slider-id="1">
+
                 <div class="row align-items-center">
                     <div class="col-lg-5">
                         <div class="item">
@@ -410,20 +482,18 @@
                                 <img src="img/quote.png" alt="" />
                                 <div class="mt-40 text">
                                     <p>
-                                        As conscious traveling Paup ers we must always be oncerned
-                                        about our dear Mother Earth. If you think about it, you
-                                        travel across her face and She is the host to your
-                                        journey.
+                                        Belajar di platform ini sangat membantu saya memahami konsep pemrograman dengan
+                                        lebih mudah. Materinya lengkap dan mentornya sangat responsif.
                                     </p>
                                 </div>
                                 <h4>Fanny Spencer</h4>
-                                <p>Chief Executive, Amazon</p>
+                                <p>Software Engineer, Amazon</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="offset-lg-1 col-lg-6">
-                        <img src="img/testimonial/t1.jpg" alt="" />
+                        <img src="img/testimonial/t1.jpg" alt="Testimoni Fanny Spencer" />
                     </div>
                 </div>
 
@@ -434,25 +504,25 @@
                                 <img src="img/quote.png" alt="" />
                                 <div class="mt-40 text">
                                     <p>
-                                        As conscious traveling Paup ers we must always be oncerned
-                                        about our dear Mother Earth. If you think about it, you
-                                        travel across her face <br />
-                                        and She is the host to your journey.
+                                        Platform e-learning ini membuat saya bisa belajar kapan saja. Saya menyukai
+                                        fleksibilitasnya dan adanya akses ke e-book dan video interaktif.
                                     </p>
                                 </div>
-                                <h4>Fanny Spencer</h4>
-                                <p>Chief Executive, Amazon</p>
+                                <h4>Rina Wijaya</h4>
+                                <p>Mahasiswa, Universitas Indonesia</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="offset-lg-1 col-lg-6">
-                        <img src="img/testimonial/t1.jpg" alt="" />
+                        <img src="img/testimonial/t1.jpg" alt="Testimoni Rina Wijaya" />
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
+
     <!-- ================ End Testimonials Area ================= -->
 
     <!-- ================ Start Registration Area ================= -->
@@ -462,39 +532,38 @@
                 <div class="col-lg-5">
                     <div class="section-title text-left text-white">
                         <h2 class="text-white">
-                            Watch Our Trainers <br />
-                            in Live Action
+                            Saksikan Pengajar Kami <br />
+                            dalam Aksi Langsung
                         </h2>
                         <p>
-                            If you are looking at blank cassettes on the web, you may be
-                            very confused at the difference in price. You may see some for
-                            as low as $.17 each.
+                            Dapatkan gambaran langsung bagaimana para instruktur profesional membimbing proses belajar
+                            secara interaktif dan menyenangkan.
                         </p>
                     </div>
                 </div>
                 <div class="offset-lg-3 col-lg-4 col-md-6">
                     <div class="course-form-section">
-                        <h3 class="text-white">Courses for Free</h3>
-                        <p class="text-white">It is high time for learning</p>
+                        <h3 class="text-white">Kursus Gratis</h3>
+                        <p class="text-white">Saatnya mulai belajar hari ini</p>
                         <form class="course-form-area contact-page-form course-form text-right" id="myForm"
                             action="mail.html" method="post">
                             <div class="form-group col-md-12">
                                 <input type="text" class="form-control" id="name" name="name"
-                                    placeholder="Name" onfocus="this.placeholder = ''"
-                                    onblur="this.placeholder = 'Name'" />
+                                    placeholder="Nama" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Nama'" />
                             </div>
                             <div class="form-group col-md-12">
                                 <input type="text" class="form-control" id="subject" name="subject"
-                                    placeholder="Phone Number" onfocus="this.placeholder = ''"
-                                    onblur="this.placeholder = 'Phone Number'" />
+                                    placeholder="Nomor Telepon" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Nomor Telepon'" />
                             </div>
                             <div class="form-group col-md-12">
                                 <input type="email" class="form-control" id="email" name="email"
-                                    placeholder="Email Address" onfocus="this.placeholder = ''"
-                                    onblur="this.placeholder = 'Email Address'" />
+                                    placeholder="Alamat Email" onfocus="this.placeholder = ''"
+                                    onblur="this.placeholder = 'Alamat Email'" />
                             </div>
                             <div class="col-lg-12 text-center">
-                                <button class="btn text-uppercase">Submit</button>
+                                <button class="btn text-uppercase">Daftar</button>
                             </div>
                         </form>
                     </div>
@@ -502,100 +571,8 @@
             </div>
         </div>
     </section>
+
     <!-- ================ End Registration Area ================= -->
 
-    <!-- ================ Start Blog Post Area ================= -->
-    <section class="blog-post-area section-gap">
-        <div class="container-fluid">
-            <div class="feature-inner row">
-                <div class="col-lg-12">
-                    <div class="section-title text-left">
-                        <h2>
-                            Features That <br />
-                            Can Avail By Everyone
-                        </h2>
-                        <p>
-                            There is a moment in the life of any aspiring astronomer that it
-                            is time to buy that first telescope. It’s exciting to think
-                            about setting up your own viewing station.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="single-blog-post">
-                        <img src="img/blog-post/b1.jpg" class="img-fluid" alt="" />
-                        <div class="overlay"></div>
-                        <div class="top-text">
-                            <p>29th, oct, 2018</p>
-                            <p>121 likes</p>
-                            <p>05 comments</p>
-                        </div>
-                        <div class="text">
-                            <h4 class="text-white">Smart Kitchen Setup</h4>
-                            <div>
-                                <p>
-                                    Lorem ipsum dolor sit amet consec tetur adipisicing elit,
-                                    sed do.
-                                </p>
-                            </div>
-                            <a href="#" class="primary-btn">
-                                View Details
-                                <i class="fa fa-long-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mt--160">
-                    <div class="single-blog-post">
-                        <img src="img/blog-post/b2.jpg" class="img-fluid" alt="" />
-                        <div class="overlay"></div>
-                        <div class="top-text">
-                            <p>29th, oct, 2018</p>
-                            <p>121 likes</p>
-                            <p>05 comments</p>
-                        </div>
-                        <div class="text">
-                            <h4 class="text-white">Smart Kitchen Setup</h4>
-                            <div>
-                                <p>
-                                    Lorem ipsum dolor sit amet consec tetur adipisicing elit,
-                                    sed do.
-                                </p>
-                            </div>
-                            <a href="#" class="primary-btn">
-                                View Details
-                                <i class="fa fa-long-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 mt--260">
-                    <div class="single-blog-post">
-                        <img src="img/blog-post/b3.jpg" class="img-fluid" alt="" />
-                        <div class="overlay"></div>
-                        <div class="top-text">
-                            <p>29th, oct, 2018</p>
-                            <p>121 likes</p>
-                            <p>05 comments</p>
-                        </div>
-                        <div class="text">
-                            <h4 class="text-white">Smart Kitchen Setup</h4>
-                            <div>
-                                <p>
-                                    Lorem ipsum dolor sit amet consec tetur adipisicing elit,
-                                    sed do.
-                                </p>
-                            </div>
-                            <a href="#" class="primary-btn">
-                                View Details
-                                <i class="fa fa-long-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- ================ End Blog Post Area ================= -->
 
 @endsection

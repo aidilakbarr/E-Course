@@ -9,10 +9,9 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index(User $user) {
-        return view('user.home.index', compact('user'));
+    public function index() {
+        return view('user.home.index');
     }
-    
     public function showAbout(){
         return view('user.about.index');
     }
