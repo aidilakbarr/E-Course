@@ -8,7 +8,7 @@
             <div class="w-full flex-1 mt-8">
                 <div class="flex flex-col items-center">
                     <button
-                        class="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-green-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline  cursor-pointer">
+                        class="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-green-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline cursor-pointer">
                         <div class="bg-white p-2 rounded-full">
                             <svg class="w-4" viewBox="0 0 533.5 544.3">
                                 <path
@@ -25,80 +25,56 @@
                                     fill="#ea4335" />
                             </svg>
                         </div>
-                        <span class="ml-4">
-                            Login with Google
-                        </span>
+                        <span class="ml-4">Login with Google</span>
                     </button>
-
                 </div>
 
-                <div class="my-12 border-b text-center">
-                    <div
-                        class="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
-                        Or login with E-mail
-                    </div>
-                </div>
-                @if ($errors->any())
-                    <div class="my-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4"
-                        role="alert">
-                        <div class="font-bold mb-2 flex items-center">
-                            Terjadi Kesalahan:
-                        </div>
-                        <ul class="list-disc list-inside text-sm space-y-1">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
-                <form action="{{ route('auth.login') }}" method="POST">
-                    @csrf
+                <form method="POST" id="loginForm" class="mt-8">
                     <div class="mx-auto max-w-xs">
-                        <input
+                        <input id="email" name="email" type="email"
                             class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                            type="email" placeholder="Email" id="email" name="email" />
-                        <input
-                            class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                            type="password" placeholder="Password" id="password" name="password" />
-                        <button
-                            class="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none cursor-pointer">
+                            placeholder="Email" />
+                        <small id="error-email" class="text-red-500 text-sm block mt-1"></small>
+
+                        <input id="password" name="password" type="password"
+                            class="mt-5 w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                            placeholder="Password" />
+                        <small id="error-password" class="text-red-500 text-sm block mt-1"></small>
+
+                        <button type="submit"
+                            class="mt-5 tracking-wide font-semibold bg-green-400 text-white w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none cursor-pointer">
                             <svg class="w-6 h-6 -ml-2" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
                                 <circle cx="8.5" cy="7" r="4" />
                                 <path d="M20 8v6M23 11h-6" />
                             </svg>
-                            <span class="ml-2">
-                                Login
-                            </span>
+                            <span class="ml-2">Login</span>
                         </button>
+
                         <div class="mt-5 text-center">
-                            <a class="inline-block text-sm text-blue-500 dark:text-blue-500 align-baseline hover:text-blue-800"
-                                href="/auth/register">
+                            <a href="/auth/register" class="text-sm text-blue-500 hover:text-blue-800">
                                 Not have an account? Register
                             </a>
                         </div>
+
                         <p class="mt-6 text-xs text-gray-600 text-center">
                             I agree to abide by BelajarDulu
-                            <a href="#" class="border-b border-gray-500 border-dotted">
-                                Terms of Service
-                            </a>
+                            <a href="#" class="border-b border-gray-500 border-dotted">Terms of Service</a>
                             and its
-                            <a href="#" class="border-b border-gray-500 border-dotted">
-                                Privacy Policy
-                            </a>
+                            <a href="#" class="border-b border-gray-500 border-dotted">Privacy Policy</a>
                         </p>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
+
     <div class="flex-1 bg-green-100 text-center hidden lg:flex">
         <div class="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
             style="background-image: url('{{ asset('images/login.png') }}')">
         </div>
     </div>
-
 @endsection
+
+<script type="module" src="{{ asset('js/pages/login.js') }}"></script>

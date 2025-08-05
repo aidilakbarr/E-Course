@@ -10,20 +10,20 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run(): void
-    {
-    \App\Models\User::factory()->create([
-        'name' => 'Admin User',
-        'email' => 'admin@example.com',
-        'role' => 'ADMIN',
-    ]);
+    // public function run(): void
+    // {
+    // \App\Models\User::factory()->create([
+    //     'name' => 'Admin User',
+    //     'email' => 'admin@example.com',
+    //     'role' => 'ADMIN',
+    // ]);
 
-    $this->call([
-        CategorySeeder::class,
-        InstructorSeeder::class,
-        CourseSeeder::class,
-        EnrollmentSeeder::class,
-    ]);
+    // $this->call([
+    //     CategorySeeder::class,
+    //     InstructorSeeder::class,
+    //     CourseSeeder::class,
+    //     EnrollmentSeeder::class,
+    // ]);
 
-    }
+    // }
 }

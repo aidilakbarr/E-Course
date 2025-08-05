@@ -10,10 +10,10 @@ class InstructorSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
-    {
-        \App\Models\User::factory(3)->create([
-            'role' => 'INSTRUCTOR',
-        ]);
-    }
+    // public function run(): void
+    // {
+    //     \App\Models\User::factory(3)->create([
+    //         'role' => 'INSTRUCTOR',
+    //     ]);
+    // }
 }

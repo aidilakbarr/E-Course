@@ -1,6 +1,6 @@
 {{-- resources/views/partials/delete-modal.blade.php --}}
 <div x-show="open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center" aria-labelledby="dialog-title"
-    role="dialog" aria-modal="true">
+    id="modal-wrapper" role="dialog" aria-modal="true">
 
     <!-- Overlay -->
     <div @click="open = false" class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true"></div>
@@ -18,9 +18,10 @@
                     </svg>
                 </div>
                 <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <h3 class="text-base font-semibold text-gray-900" id="dialog-title">{{ $title ?? 'Delete Item' }}
+                    <h3 id="modal-title" class="text-base font-semibold text-gray-900">
+                        {{ $title ?? 'Delete Item' }}
                     </h3>
-                    <p class="mt-2 text-sm text-gray-500">
+                    <p id="modal-message" class="mt-2 text-sm text-gray-500">
                         {{ $message ?? 'Are you sure you want to delete this item?' }}
                     </p>
                 </div>
@@ -28,10 +29,10 @@
         </div>
 
         <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-            <form action="{{ $route ?? '#' }}" method="POST">
+            <form id="modal-form" action="{{ $route ?? '#' }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit"
+                <button id="modal-button" type="submit"
                     class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-500 sm:ml-3 sm:w-auto cursor-pointer">
                     Delete
                 </button>

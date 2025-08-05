@@ -11,16 +11,16 @@ class CategorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     */
-   public function run(): void
-    {
-        $categories = ['Programming', 'Design', 'Marketing', 'Business'];
+//      */
+    //    public function run(): void
+//     {
+//         $categories = ['Programming', 'Design', 'Marketing', 'Business'];
 
-        foreach ($categories as $category) {
-            Category::create([
-                'name' => $category,
-                'slug' => Str::slug($category),
-            ]);
-        }
-    }
+    //         foreach ($categories as $category) {
+//             Category::create([
+//                 'name' => $category,
+//                 'slug' => Str::slug($category),
+//             ]);
+//         }
+//     }
 }

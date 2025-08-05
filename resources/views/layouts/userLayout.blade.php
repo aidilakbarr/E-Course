@@ -61,12 +61,7 @@
     <script src="js/waypoints.min.js"></script>
     <script src="js/jquery.nice-select.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
-<!-- HAPUS YANG INI -->
-<link rel="stylesheet" href="css/bootstrap.css" />
-<script src="js/vendor/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-
-<!-- GANTI DENGAN INI -->

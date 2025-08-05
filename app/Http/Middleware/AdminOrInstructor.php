@@ -1,26 +1,25 @@
 <?php
-
 namespace App\Http\Middleware;
 
 use App\Enums\RoleEnum;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AdminOrInstructor
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
-    if (auth()->check() && (auth()->user()->role === RoleEnum::ADMIN  || auth()->user()->role === RoleEnum::INSTRUCTOR)) {
-        return $next($request);
+        $user = auth('api')->user();
+        dd($user);
+
+        if ($user && ($user->role === RoleEnum::ADMIN || $user->role === RoleEnum::INSTRUCTOR)) {
+            return $next($request);
+        }
+
+        return redirect()->route('user.home.index')->with('error', 'Akses khusus admin/instructor.');
     }
 
-
-        return redirect(route('user.home.index'))->with('error', 'Akses khusus admin.');
-    }
 }
+
