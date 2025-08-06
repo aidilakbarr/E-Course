@@ -48,7 +48,7 @@
     <!-- Trigger -->
     <button @click="open = !open"
         class="flex items-center w-full py-2 text-left focus:outline-none">
-        <i class="fas fa-book mr-2"></i>Lectures
+        <i class="fas fa-book mr-2"></i>Akademik
         <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
         </svg>
@@ -56,7 +56,7 @@
 
     <ul x-show="open" @click.away="open = false" x-transition
         class="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-        <li><a href="/matakuliah" class="block text-black px-4 py-2 hover:bg-gray-100">Mata kuliah</a></li>
+        <li><a id="matakuliah" href="/matakuliah" class="block text-black px-4 py-2 hover:bg-gray-100">Mata kuliah</a></li>
         <li><a href="/matakuliah" class="block text-black px-4 py-2 hover:bg-gray-100">Dosen Pengampu</a></li>
     </ul>
 </li>
@@ -65,11 +65,14 @@
             navLectures.classList.add("relative", "group");
 
             const laporan = document.getElementById("nav-laporan");
+            const matakuliah = document.getElementById("matakuliah")
             if (user.role === 'ADMIN') {
                 laporan.href = "/laporan";
                 laporan.innerHTML = `<i class="fas fa-chart-line mr-2"></i> Laporan Sistem`;
             } else {
                 laporan.style.display = "none";
+                matakuliah.href = "/set_krs_mhs"
+                matakuliah.innerHTML = "Penawaran KRS"
             }
 
             sidebar.style.display = "block";

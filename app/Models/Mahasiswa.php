@@ -9,7 +9,7 @@ class Mahasiswa extends Model
 {
     use HasFactory;
 
-        protected $fillable = [
+    protected $fillable = [
         'user_id',
         'nim',
         'prodi',
@@ -30,5 +30,17 @@ class Mahasiswa extends Model
     {
         return $this->hasMany(KelasMahasiswa::class);
     }
+
+    public function krs()
+    {
+        return $this->hasMany(Krs::class);
+    }
+
+    public function matakuliahs()
+    {
+        return $this->belongsToMany(Matakuliah::class, 'krs')
+            ->withPivot('semester', 'sks', 'status');
+    }
+
 
 }
