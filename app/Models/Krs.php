@@ -19,7 +19,6 @@ class Krs extends Model
         return $this->belongsTo(Mahasiswa::class);
     }
 
-    // Model Krs.php
     public function matakuliahs()
     {
         return $this->belongsToMany(Matakuliah::class, 'krs_mata_kuliah');

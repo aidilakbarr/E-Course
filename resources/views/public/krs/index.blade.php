@@ -43,7 +43,14 @@
 
         <!-- Tabel KRS Tersimpan -->
         <div id="panel-terpilih" class="hidden">
+            <button id="download-krs-btn" class="bg-green-600 text-white px-5 py-2 rounded">
+                Download PDF
+            </button>
+
+
+
             <table class="w-full text-sm text-left text-gray-600 border">
+
                 <thead class="bg-gray-100 text-gray-700 uppercase text-xs">
                     <tr>
                         <th class="px-4 py-2">Nama Kelas</th>
@@ -87,6 +94,8 @@
         let dataMatkul = [];
         let selectedMatkul = [];
         let krsTersimpan = [];
+        let matakuliahIdToDelete = null;
+        let krsIdToDelete = null;
 
         tabPilih.onclick = () => {
             tabPilih.classList.add("text-blue-600", "border-blue-600", "border-b-2", "font-semibold");
@@ -103,6 +112,44 @@
             panelPilih.classList.add("hidden");
             panelTerpilih.classList.remove("hidden");
         };
+
+        document.getElementById('download-krs-btn').addEventListener('click', async () => {
+            const krsId = krsIdToDelete;
+
+            try {
+                await apiClient.get(`/krs/${krsId}/generate-pdf`);
+
+                setTimeout(async () => {
+                    try {
+                        const response = await apiClient.get(`/krs/${krsId}/download-pdf`, {
+                            responseType: 'blob'
+                        });
+
+                        const blob = new Blob([response.data], {
+                            type: 'application/pdf'
+                        });
+                        const url = window.URL.createObjectURL(blob);
+
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = `krs-${krsId}.pdf`;
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
+                        window.URL.revokeObjectURL(url);
+                    } catch (downloadErr) {
+                        alert('PDF belum siap. Coba beberapa saat lagi.');
+                    }
+                }, 3000);
+            } catch (err) {
+                console.error(err);
+                alert('Gagal generate PDF.');
+            }
+        });
+
+
+
+
 
         function renderTable() {
             tableBody.innerHTML = "";
@@ -131,6 +178,34 @@
 
         }
 
+        window.simpanKRS = async function() {
+            try {
+                const res = await apiClient.put(`/krs/submit`, {
+                    status: 'SUBMITTED'
+                });
+
+                Swal.fire({
+                    title: "Sukses!",
+                    text: "KRS berhasil disimpan.",
+                    icon: "success",
+                    timer: 2000
+                });
+
+                renderTersimpan();
+                loadData();
+
+            } catch (err) {
+                console.error(err);
+                Swal.fire({
+                    title: "Gagal!",
+                    text: "Gagal menyimpan KRS. Coba lagi nanti.",
+                    icon: "error",
+                    timer: 2500
+                });
+            }
+        }
+
+
 
 
         async function loadData() {
@@ -138,8 +213,13 @@
                 const res = await apiClient.get('/krs/tersedia');
                 const krs_tersimpan = await apiClient.get('/krs/terpilih');
                 const rawData = res.data.data;
-                const krsTersimpan = krs_tersimpan.data.data;
+                const krsTersimpan = krs_tersimpan.data.data.matakuliahs;
                 const idsTersimpan = krsTersimpan.map(item => item.id);
+                console.log({
+                    krs_tersimpan,
+                    res
+                })
+                krsIdToDelete = krs_tersimpan.data.data.krs_id
 
 
                 dataMatkul = rawData.
@@ -188,7 +268,7 @@
             const krsBody = document.getElementById("krs-table-body");
             krsBody.innerHTML = "";
             const res = await apiClient.get('/krs/terpilih');
-            const data = res.data.data
+            const data = res.data.data.matakuliahs
             console.log({
                 res
             })
@@ -196,9 +276,6 @@
                 const row = document.createElement("tr");
                 row.className = "border-b";
                 row.innerHTML = `
-        <td class="px-3 py-2">
-          <input type="checkbox"  />
-        </td>
         <td class="px-4 py-2">${item.nama}</td>
         <td class="px-4 py-2">${item.jam_mulai} - ${item.jam_selesai}</td>
         <td class="px-4 py-2">${item.sks}</td>
@@ -211,7 +288,6 @@
             });
         };
 
-        let matakuliahIdToDelete = null;
 
 
         window.handleDelete = function(matakuliahId, matakuliahName) {
@@ -223,27 +299,40 @@
 
             matakuliahIdToDelete = matakuliahId;
 
-            modalForm.action = `/lectures/${matakuliahId}`;
+            modalForm.action = `/krs/${matakuliahId}`;
             modalTitleText.innerText = "Hapus matakuliah";
             modalMessageText.innerText = `Yakin ingin menghapus matakuliah "${matakuliahName}"?`;
             modalButton.innerText = "Hapus";
-
             window.dispatchEvent(new Event("open-modal"));
         };
 
+
         window.confirmDelete = async function() {
             try {
-                await apiClient.delete(`/matakuliah/${matakuliahIdToDelete}`);
-
+                const res = await apiClient.delete(`krs/${krsIdToDelete}/matakuliah/${matakuliahIdToDelete}`);
+                console.log({
+                    res
+                })
                 window.dispatchEvent(new Event("close-modal"));
 
+                Swal.fire({
+                    title: "Sukses!",
+                    text: `Matakuliah Berhasil di hapus`,
+                    icon: "success",
+                    timer: 2500
+                });
                 const row = document
                     .querySelector(`button[onclick*="${matakuliahIdToDelete}"]`)
                     ?.closest("tr");
+
                 if (row) row.remove();
 
+
                 matakuliahIdToDelete = null;
+                renderTable();
+                loadData()
             } catch (error) {
+                console.log(error)
                 alert("Terjadi kesalahan saat menghapus dosen.");
             }
         };
@@ -267,7 +356,7 @@
 
             const selectedData = dataMatkul.filter((m) => selectedMatkul.includes(m.id));
             console.log("Data matakuliah tersimpan:", selectedData);
-            matakuliahTersimpan.push(selectedData);
+            krsTersimpan.push(selectedData);
             const selectedMatakuliahIds = Array.from(document.querySelectorAll('.row-checkbox:checked'))
                 .map(checkbox => checkbox.dataset.id);
 
@@ -275,9 +364,17 @@
                 selectedMatakuliahIds
             });
 
-            await apiClient.post('/krs/store', {
+            const res = await apiClient.post('/krs/store', {
                 matakuliah_ids: selectedMatakuliahIds
             })
+
+            console.log({
+                res
+            })
+
+            renderTable()
+            loadData()
+            renderTersimpan()
         }
 
         function hapusKRS(nama) {

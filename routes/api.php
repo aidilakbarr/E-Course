@@ -36,6 +36,9 @@ Route::group([
         Route::get('/tersedia', [KrsController::class, 'tersedia'])->name('krs.tersedia');
         Route::get('/terpilih', [KrsController::class, 'terpilih'])->name('krs.terpilih');
         Route::post('/store', [KrsController::class, 'store'])->name('krs.store');
-        Route::delete('/krs/{krs}/matakuliah/{matakuliah}', [KrsController::class, 'destroy'])->name('krs.destroy');
+        Route::put('/submit', [KrsController::class, 'submit'])->name('krs.submit');
+        Route::delete('/{krs}/matakuliah/{matakuliah}', [KrsController::class, 'destroy'])->name('krs.destroy');
+        Route::get('krs/{krsId}/generate-pdf', [KrsController::class, 'krs_pdf']);
+        Route::get('krs/{krsId}/download-pdf', [KrsController::class, 'download_pdf']);
     });
 });
