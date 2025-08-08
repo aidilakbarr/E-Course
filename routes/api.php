@@ -38,7 +38,7 @@ Route::group([
         Route::post('/store', [KrsController::class, 'store'])->name('krs.store');
         Route::put('/submit', [KrsController::class, 'submit'])->name('krs.submit');
         Route::delete('/{krs}/matakuliah/{matakuliah}', [KrsController::class, 'destroy'])->name('krs.destroy');
-        Route::get('krs/{krsId}/generate-pdf', [KrsController::class, 'krs_pdf']);
-        Route::get('krs/{krsId}/download-pdf', [KrsController::class, 'download_pdf']);
+        Route::get('/{krsId}/generate-pdf', [KrsController::class, 'krs_pdf']);
+        Route::get('/{krsId}/download-pdf', [KrsController::class, 'download_pdf']);
     });
 });

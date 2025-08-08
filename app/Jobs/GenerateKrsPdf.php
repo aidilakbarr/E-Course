@@ -36,8 +36,11 @@ class GenerateKrsPdf implements ShouldQueue
 
         $pdf = Pdf::loadView('pdf.krs', compact('krs', 'mahasiswa'));
 
-        $fileName = 'krs_tes' . $krs->id . '.pdf';
-        Storage::disk('public')->put("pdf/{$fileName}", $pdf->output());
+        $filePath = 'pdf/krs_' . $krs->id . '.pdf';
+
+        Storage::disk('public')->put($filePath, $pdf->output());
+
+        $krs->update(['pdf_generated' => true]);
 
         // Simpan path di database 
         // $krs->update([

@@ -12,6 +12,7 @@ class Krs extends Model
     protected $fillable = [
         'mahasiswa_id',
         'status',
+        'pdf_generated'
     ];
 
     public function mahasiswa()

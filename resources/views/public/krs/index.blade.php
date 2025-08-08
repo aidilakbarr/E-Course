@@ -96,6 +96,7 @@
         let krsTersimpan = [];
         let matakuliahIdToDelete = null;
         let krsIdToDelete = null;
+        let isDownloading = false;
 
         tabPilih.onclick = () => {
             tabPilih.classList.add("text-blue-600", "border-blue-600", "border-b-2", "font-semibold");
@@ -112,44 +113,6 @@
             panelPilih.classList.add("hidden");
             panelTerpilih.classList.remove("hidden");
         };
-
-        document.getElementById('download-krs-btn').addEventListener('click', async () => {
-            const krsId = krsIdToDelete;
-
-            try {
-                await apiClient.get(`/krs/${krsId}/generate-pdf`);
-
-                setTimeout(async () => {
-                    try {
-                        const response = await apiClient.get(`/krs/${krsId}/download-pdf`, {
-                            responseType: 'blob'
-                        });
-
-                        const blob = new Blob([response.data], {
-                            type: 'application/pdf'
-                        });
-                        const url = window.URL.createObjectURL(blob);
-
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.download = `krs-${krsId}.pdf`;
-                        document.body.appendChild(link);
-                        link.click();
-                        link.remove();
-                        window.URL.revokeObjectURL(url);
-                    } catch (downloadErr) {
-                        alert('PDF belum siap. Coba beberapa saat lagi.');
-                    }
-                }, 3000);
-            } catch (err) {
-                console.error(err);
-                alert('Gagal generate PDF.');
-            }
-        });
-
-
-
-
 
         function renderTable() {
             tableBody.innerHTML = "";
@@ -239,6 +202,57 @@
             }
         }
 
+        document.getElementById('download-krs-btn').addEventListener('click', async () => {
+            if (isDownloading) return;
+            isDownloading = true;
+            try {
+                await apiClient.get(`/krs/${krsIdToDelete}/generate-pdf`);
+                const intervalId = setInterval(async () => {
+                    try {
+                        const response = await apiClient.get(`/krs/${krsIdToDelete}/download-pdf`, {
+                            responseType: 'blob',
+                            validateStatus: (status) => status === 200 || status === 202
+                        });
+
+                        console.log({
+                            response
+                        })
+
+                        if (response.status === 202) {
+                            console.log("PDF belum siap...")
+                            return
+                        }
+
+                        clearInterval(intervalId);
+
+                        const blob = new Blob([response.data], {
+                            type: 'application/pdf'
+                        });
+                        const url = window.URL.createObjectURL(blob);
+
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = `krs-${krsIdToDelete}.pdf`;
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
+                        window.URL.revokeObjectURL(url);
+                        isDownloading = false;
+                    } catch (downloadErr) {
+                        console.log({
+                            downloadErr
+                        })
+                        clearInterval(intervalId);
+                        isDownloading = false;
+                        alert('PDF belum siap. Coba beberapa saat lagi.');
+                    }
+                }, 500);
+            } catch (err) {
+                console.error(err);
+                clearInterval(intervalId);
+                alert('Gagal generate PDF.');
+            }
+        });
 
         function addCheckboxListeners() {
             const checkboxes = document.querySelectorAll(".row-checkbox");

@@ -123,14 +123,13 @@ class KrsController extends Controller
     public function download_pdf($krsId)
     {
         $krs = Krs::findOrFail($krsId);
+        if (!$krs->pdf_generated) {
+            return response()->json(['ready' => false], 202);
+        }
         $filePath = 'pdf/krs_' . $krs->id . '.pdf';
-
         if (!Storage::disk('public')->exists($filePath)) {
             return response()->json(['error' => 'PDF belum tersedia.'], 404);
         }
-
         return response()->file(storage_path('app/public/' . $filePath));
     }
-
-
 }
