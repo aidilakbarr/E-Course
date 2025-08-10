@@ -7,12 +7,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Resources\UserResource;
+use App\Imports\UsersImport;
+use App\Jobs\ImportUsersJob;
 use App\Models\Dosen;
 use App\Models\User;
 use App\Services\FileUploadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
@@ -206,7 +209,28 @@ class UserController extends Controller
         ]);
     }
 
+    public function importMahasiswa(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
 
+        $path = $request->file('file')->store('imports');
 
+        try {
+            ImportUsersJob::dispatch($path);
+
+            return response()->json([
+                'success' => true,
+                'message' => "Proses import sedang berjalan. Anda akan mendapat notifikasi setelah selesai."
+            ], 200);
+
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
 
 }

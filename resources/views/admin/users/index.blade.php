@@ -9,13 +9,44 @@
                 <i class="fas fa-users mr-3"></i> Daftar Pengguna
             </p>
             <div class="w-full overflow-x-auto">
-                <div class="flex justify-between my-4">
-                    <a href="/users/create">
-                        <button
-                            class="bg-blue-600 font-semibold py-2 rounded shadow hover:bg-blue-700 flex items-center justify-center px-6 text-white">
-                            <i class="fas fa-user-plus mr-2"></i> Pengguna Baru
+
+                <div class="flex justify-between items-center my-4">
+                    <div class="flex items-center">
+                        <!-- TOMBOL IKON -->
+                        <button id="toggleImportForm" class="text-blue-600 hover:text-blue-800 text-2xl mr-2">
+                            <i class="fas fa-file-import"></i> <!-- Ikon import file -->
                         </button>
-                    </a>
+
+                        <div id="importFormContainer"
+                            class="max-w-xl mx-auto mt-10 p-6 bg-white shadow-md rounded-md hidden">
+                            <h2 class="text-xl font-semibold mb-4">Import Data User dari Excel</h2>
+
+                            <form id="importForm">
+                                <div class="mb-4">
+                                    <label for="excelFile" class="block text-gray-700 font-medium mb-2">Pilih File
+                                        Excel</label>
+                                    <input type="file" id="excelFile" name="file" accept=".xlsx,.xls" required
+                                        class="w-full border border-gray-300 rounded px-3 py-2" />
+                                </div>
+
+                                <button type="submit"
+                                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Import</button>
+                            </form>
+
+                            <div id="message" class="mt-4 text-sm"></div>
+                        </div>
+                        <a href="/users/create">
+                            <button
+                                class="bg-blue-600 font-semibold py-2 rounded shadow hover:bg-blue-700 flex items-center justify-center px-6 text-white">
+                                <i class="fas fa-user-plus mr-2"></i> Pengguna Baru
+                            </button>
+                        </a>
+
+                    </div>
+
+
+
+
 
                     <form method="GET" action="{{ route('users.index') }}" class="mb-4" id="search-form">
                         <input type="text" name="search" value="{{ request('search') }}"

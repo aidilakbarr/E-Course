@@ -30,6 +30,7 @@ Route::group([
 ], function () {
     Route::get('show-dosen', [UserController::class, 'getDosens'])->name('show.getDosens');
     Route::put('/profile/update', [UserController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/import-user', [UserController::class, 'importMahasiswa']);
     Route::apiResource('users', UserController::class);
     Route::apiResource('matakuliah', MatakuliahController::class);
     Route::prefix('krs')->as('krs.')->group(function () {

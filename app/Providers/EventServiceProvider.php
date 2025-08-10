@@ -20,6 +20,13 @@ class EventServiceProvider extends ServiceProvider
         ],
     ];
 
+    protected $observers = [
+        \App\Models\User::class => \App\Observers\LogObserver::class,
+        \App\Models\Matakuliah::class => \App\Observers\LogObserver::class,
+        \App\Models\Krs::class => \App\Observers\LogObserver::class,
+    ];
+
+
     /**
      * Register any events for your application.
      */

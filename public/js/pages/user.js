@@ -189,3 +189,57 @@ document.getElementById("search-form").addEventListener("submit", function (e) {
     page = 1;
     loadUsers();
 });
+
+document
+    .getElementById("toggleImportForm")
+    .addEventListener("click", function () {
+        const formContainer = document.getElementById("importFormContainer");
+        formContainer.classList.toggle("hidden");
+    });
+
+document
+    .getElementById("importForm")
+    .addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const formData = new FormData();
+        const fileInput = document.getElementById("excelFile");
+        if (!fileInput.files.length) {
+            alert("Harap pilih file Excel terlebih dahulu.");
+            return;
+        }
+
+        formData.append("file", fileInput.files[0]);
+        for (const [key, value] of formData.entries()) {
+            console.log(`${key}:`, value);
+        }
+
+        console.log({ formData, fileInput });
+        try {
+            const response = await apiClient.post("/import-user", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            const result = response.data;
+            if (response.ok) {
+                Swal.fire({
+                    title: "Sukses!",
+                    text: `Mahasiswa Berhasil di tambahkan`,
+                    icon: "success",
+                    timer: 2500,
+                });
+            } else {
+                document.getElementById("message").textContent =
+                    result.message || "Terjadi kesalahan saat import.";
+                document
+                    .getElementById("message")
+                    .classList.add("text-red-600");
+            }
+        } catch (err) {
+            console.log({ err });
+            document.getElementById("message").textContent =
+                "Gagal mengirim file.";
+            document.getElementById("message").classList.add("text-red-600");
+        }
+    });
