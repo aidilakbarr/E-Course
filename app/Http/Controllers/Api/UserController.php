@@ -13,6 +13,7 @@ use App\Models\Dosen;
 use App\Models\User;
 use App\Services\FileUploadService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -22,15 +23,27 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
+        $start = microtime(true);
         $user = auth()->user();
+        $search = $request->query('search');
+        $page = $request->query('page', 1);
 
-        $users = User::search($request->query('search'))
-            ->latest()
-            ->paginate(5)
-            ->withQueryString();
+        $cacheKey = "users_{$search}_page_{$page}";
 
+        $users = Cache::remember(
+            $cacheKey,
+            now()->addMinutes(10),
+            fn() =>
+            User::search($search)
+                ->latest()
+                ->paginate(5)
+                ->withQueryString()
+        );
+
+        $time = microtime(true) - $start;
 
         return response()->json([
+            'response-time' => $time,
             'success' => true,
             'message' => 'Daftar User ditemukan',
             'pagination' => [
@@ -224,7 +237,6 @@ class UserController extends Controller
                 'success' => true,
                 'message' => "Proses import sedang berjalan. Anda akan mendapat notifikasi setelah selesai."
             ], 200);
-
         } catch (\Throwable $e) {
             return response()->json([
                 'success' => false,
