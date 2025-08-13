@@ -8,6 +8,7 @@ use App\Http\Controllers\MatakuliahController;
 use App\Http\Controllers\TokenSessionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 // Auth
 Route::prefix('auth')->middleware('guest')->controller(AuthController::class)->group(function () {
@@ -35,3 +36,6 @@ Route::delete('/auth/logout', function () {
     return response()->json(['message' => 'Logged out successfully']);
 });
 
+Route::get('/inertia', function () {
+    return Inertia::render('Home');
+});

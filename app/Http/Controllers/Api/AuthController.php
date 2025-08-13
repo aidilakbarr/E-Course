@@ -5,19 +5,26 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\RegisterUserRequest;
+use App\Http\Resources\UserResource;
 use App\Jobs\SendWelcomeEmail;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
+
 class AuthController extends Controller
 {
+    private function tokenTTL()
+    {
+        return auth()->factory()->getTTL() * 60;
+    }
     public function register(RegisterUserRequest $request)
     {
         try {
@@ -29,29 +36,19 @@ class AuthController extends Controller
 
             SendWelcomeEmail::dispatch($user);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Registrasi berhasil',
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                ],
+            return successResponse('Registrasi berhasil', [
+                'user' => new UserResource($user),
                 'access_token' => $accessToken,
                 'token_type' => 'bearer',
-                'expires_in' => auth()->factory()->getTTL() * 60,
+                'expires_in' => $this->tokenTTL()
             ], 201);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validasi gagal',
+        } catch (ValidationException $e) {
+            return errorResponse("Validasi gagal", [
                 'errors' => $e->errors(),
             ], 422);
         } catch (\Throwable $th) {
             report($th);
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat registrasi',
+            return errorResponse("Terjadi kesalahan saat registrasi", [
                 'error' => $th->getMessage(),
             ], 500);
         }
@@ -68,25 +65,16 @@ class AuthController extends Controller
                 ], 401);
             }
             $user = auth()->user();
-            return response()->json([
-                'success' => true,
-                'message' => 'Login berhasil',
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'role' => $user->role ?? null,
-                    'profile' => $user->profile ?? null,
-                ],
+
+            return successResponse('Login berhasil', [
+                'user' => new UserResource($user),
                 'access_token' => $accessToken,
                 'token_type' => 'bearer',
-                'expires_in' => auth()->factory()->getTTL() * 60,
+                'expires_in' => $this->tokenTTL()
             ]);
         } catch (JWTException $e) {
             report($e);
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal membuat token',
+            return errorResponse('Gagal Membuat token', [
                 'error' => $e->getMessage(),
             ], 500);
         }
@@ -97,15 +85,10 @@ class AuthController extends Controller
             $user = auth()->user();
 
             if (!$user) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Tidak terautentikasi',
-                ], 401);
+                return errorResponse('Tidak terauthentikasi');
             }
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Data user ditemukan',
+            return successResponse('Data user ditemukan', [
                 'user' => [
                     'id' => $user->id,
                     'name' => $user->name,
@@ -115,22 +98,16 @@ class AuthController extends Controller
                 ],
             ], 200);
         } catch (TokenExpiredException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Token kadaluarsa. Silakan login ulang.',
+            return errorResponse('Token kadaluarsa. Silakan login ulang', [
                 'error' => $e->getMessage(),
             ], 401);
         } catch (TokenInvalidException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Token tidak valid. Silakan login ulang.',
+            return errorResponse('Token tidak valid. Silakan login ulang', [
                 'error' => $e->getMessage(),
             ], 401);
         } catch (\Throwable $th) {
             report($th);
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat mengambil data user',
+            return errorResponse('Terjadi kesalahan saat mengambil data user', [
                 'error' => $th->getMessage(),
             ], 500);
         }
@@ -140,15 +117,10 @@ class AuthController extends Controller
     {
         try {
             auth()->logout();
-            return response()->json([
-                'success' => true,
-                'message' => 'Berhasil logout',
-            ], 200);
+            return successResponse('Berhasil logout');
         } catch (\Throwable $th) {
             report($th);
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal logout',
+            return errorResponse('Gagal logout', [
                 'error' => $th->getMessage(),
             ], 500);
         }
@@ -168,31 +140,23 @@ class AuthController extends Controller
             $user = auth()->user();
             $newRefreshToken = JWTAuth::fromUser($user, ['exp' => Carbon::now()->addMinutes(config('jwt.refresh_ttl', 10080))->timestamp]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Token berhasil diperbarui',
+            return successResponse('Token berhasil diperbarui', [
                 'access_token' => $newAccessToken,
                 'refresh_token' => $newRefreshToken,
                 'token_type' => 'bearer',
-                'expires_in' => auth()->factory()->getTTL() * 60,
+                'expires_in' => $this->tokenTTL()
             ]);
         } catch (TokenExpiredException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Sesi berakhir. Refresh token kadaluarsa. Silakan login ulang.',
+            return errorResponse('Sesi berakhir. Refresh token kadaluarsa. Silakan login ulang', [
                 'error' => $e->getMessage(),
             ], 401);
         } catch (TokenInvalidException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Refresh token tidak valid. Silakan login ulang.',
+            return errorResponse('Refresh token tidak valid. Silakan login ulang', [
                 'error' => $e->getMessage(),
             ], 401);
         } catch (\Throwable $th) {
             report($th);
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal memperbarui token',
+            return errorResponse('Gagal memperbarui token', [
                 'error' => $th->getMessage(),
             ], 401);
         }
