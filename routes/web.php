@@ -12,16 +12,19 @@ use Inertia\Inertia;
 
 // Auth
 Route::prefix('auth')->middleware('guest')->controller(AuthController::class)->group(function () {
-    Route::get('/login', 'showLoginForm')->name('auth.login');
-    Route::get('/register', 'showRegisterForm')->name('auth.register');
+    Route::post('/login', 'login')->name('auth.login');
+    Route::get('/login', 'showLoginForm')->name('auth.showLoginForm');
+    Route::get('/register', 'showRegisterForm')->name('auth.showRegisterForm');
+    Route::post('/register', 'register')->name('auth.register');
 });
 
-Route::middleware(['auth.jwt.session'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::resource('users', UserController::class)->only(['index', 'create', 'edit']);
     Route::resource('matakuliah', MatakuliahController::class)->only(['index', 'create', 'edit']);
     Route::get('/set_krs_mhs', [KrsController::class, 'index'])->name('set_krs_mhs.index');
     Route::get('/pdf/krs/{krs}', [KrsController::class, 'krs_pdf'])->name('krs.pdf');
+    Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
     // Route::get('/pdf/krs/{krs}', function ($krs) {
     //     return \App\Models\Krs::find($krs);
     // });
@@ -30,11 +33,11 @@ Route::middleware(['auth.jwt.session'])->group(function () {
 
 Route::post('/store-token', [TokenSessionController::class, 'store']);
 
-Route::delete('/auth/logout', function () {
-    Session::forget('jwt_token');
-    Session::flush();
-    return response()->json(['message' => 'Logged out successfully']);
-});
+// Route::delete('/auth/logout', function () {
+//     Session::forget('jwt_token');
+//     Session::flush();
+//     return response()->json(['message' => 'Logged out successfully']);
+// });
 
 Route::get('/inertia', function () {
     return Inertia::render('Home');

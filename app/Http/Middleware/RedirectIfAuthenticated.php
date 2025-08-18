@@ -20,14 +20,14 @@ class RedirectIfAuthenticated
         $guards = empty($guards) ? [null] : $guards;
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                $user = Auth::guard($guard)->user();
-                if ($user->role === RoleEnum::ADMIN || $user->role === RoleEnum::INSTRUCTOR) {
-                    return redirect(route('admin.dashboard.index'));
+                $user = Auth::user();
+                if ($user->role === RoleEnum::ADMIN || $user->role === RoleEnum::KAPRODI) {
+                    return redirect(route('dashboard.index'));
                 }
-                return redirect(route('user.home.index'));
+                return redirect(route('dashboard.index'));
             }
         }
-    return $next($request);
-}
+        return $next($request);
+    }
 
 }

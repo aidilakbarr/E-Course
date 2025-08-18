@@ -3,15 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('admin.users.index');
+        $start = microtime(true);
+
+        $response = app(\App\Http\Controllers\Api\UserController::class)
+            ->index($request)
+            ->getData(true);
+
+        $time = microtime(true) - $start;
+
+        return Inertia::render('Admin/Users/Index', [
+            'users' => $response['data'],
+            'pagination' => $response['pagination'],
+            'user' => $response['user'],
+            'responseTime' => $time
+        ]);
     }
 
     /**
