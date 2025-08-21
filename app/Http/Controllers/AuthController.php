@@ -121,8 +121,8 @@ class AuthController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
             // return back()->with('success', 'Berhasil logout!');
-            // return redirect()->route('auth.login')->with('success', 'Berhasil logout!');
-            return redirect()->route('auth.login');
+            return redirect()->route('auth.login')->with('success', 'Berhasil logout!');
+            // return redirect()->route('auth.login');
         } catch (\Throwable $th) {
             report($th);
             return errorResponse('Gagal logout', [

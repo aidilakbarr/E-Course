@@ -20,7 +20,7 @@ Route::prefix('auth')->middleware('guest')->controller(AuthController::class)->g
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    Route::resource('users', UserController::class)->only(['index', 'create', 'edit']);
+    Route::resource('users', UserController::class)->except(['show']);
     Route::resource('matakuliah', MatakuliahController::class)->only(['index', 'create', 'edit']);
     Route::get('/set_krs_mhs', [KrsController::class, 'index'])->name('set_krs_mhs.index');
     Route::get('/pdf/krs/{krs}', [KrsController::class, 'krs_pdf'])->name('krs.pdf');

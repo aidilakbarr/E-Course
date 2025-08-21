@@ -26,6 +26,7 @@ class UserStoreRequest extends FormRequest
     {
         $isUpdate = $this->method() === 'PUT' || $this->method() === 'PATCH';
         $userId = $this->route('user');
+        $dosenId = \App\Models\Dosen::where('user_id', $userId->id)->value('id');
 
         $rules = [
             'profile_url' => ['sometimes', 'image', 'max:2048'],
@@ -37,9 +38,11 @@ class UserStoreRequest extends FormRequest
                 ? Rule::unique('users', 'email')->ignore($userId)
                 : Rule::unique('users', 'email'),
             ],
-            'password' => $isUpdate
-                ? ['nullable', 'min:6']
-                : ['required', 'min:6'],
+            'password' => [
+                $isUpdate
+                ? ['nullable']
+                : ['required', 'min:6']
+            ],
             'role' => ['required', new Enum(RoleEnum::class)],
         ];
 
@@ -50,7 +53,14 @@ class UserStoreRequest extends FormRequest
         }
 
         if ($this->role === 'DOSEN') {
-            $rules['nidn'] = ['required', 'string', 'max:30', 'unique:dosens,nidn'];
+            $rules['nidn'] = [
+                'required',
+                'string',
+                'max:30',
+                $isUpdate
+                ? Rule::unique('dosens', 'nidn')->ignore($dosenId)
+                : Rule::unique('dosens', 'nidn')
+            ];
             $rules['prodi'] = ['required', 'string'];
         }
 

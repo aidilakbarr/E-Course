@@ -3,7 +3,7 @@
         <div class="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
             <div class="mt-12 flex flex-col items-center">
                 <div class="w-full flex-1 mt-8">
-                    <div class="flex flex-col items-center">
+                    <!-- <div class="flex flex-col items-center">
                         <button
                             class="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-green-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline cursor-pointer"
                         >
@@ -29,33 +29,54 @@
                             </div>
                             <span class="ml-4">Login with Google</span>
                         </button>
-                    </div>
+                    </div> -->
 
                     <form @submit.prevent="submitLogin" class="mt-8">
                         <div class="mx-auto max-w-xs">
                             <input
-                                v-model="form.email"
+                                v-model="email"
+                                v-bind="emailAttrs"
                                 type="email"
                                 class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white text-slate-600"
                                 placeholder="Email"
                             />
                             <div class="text-red-500 text-sm">
-                                {{ form.errors.email ?? "" }}
+                                {{ errors.email ?? "" }}
                             </div>
+                            <span
+                                v-if="page.props.errors.email"
+                                class="text-red-500"
+                            >
+                                {{ page.props.errors.email }}
+                            </span>
 
                             <input
-                                v-model="form.password"
+                                v-model="password"
+                                v-bind="passwordAttrs"
                                 type="password"
                                 class="mt-5 w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white text-slate-600"
                                 placeholder="Password"
                             />
                             <div class="text-red-500 text-sm">
-                                {{ form.errors.password ?? "" }}
+                                {{ errors.password ?? "" }}
                             </div>
+
+                            <span
+                                v-if="page.props.errors.password"
+                                class="text-red-500"
+                            >
+                                {{ page.props.errors.password }}
+                            </span>
+
+                            <span
+                                v-if="page.props.errors.login"
+                                class="text-red-500"
+                            >
+                                {{ page.props.errors.login }}
+                            </span>
 
                             <button
                                 type="submit"
-                                :disabled="form.processing"
                                 class="mt-5 tracking-wide font-semibold bg-green-400 text-white w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none cursor-pointer"
                             >
                                 <svg
@@ -73,10 +94,9 @@
                                     <path d="M20 8v6M23 11h-6" />
                                 </svg>
 
-                                <span class="ml-2" v-if="form.processing"
-                                    >Loading...</span
-                                >
-                                <span class="ml-2" v-else>Login</span>
+                                <span class="ml-2" :disabled="isSubmitting">{{
+                                    isSubmitting ? "Loading..." : "Login"
+                                }}</span>
                             </button>
 
                             <div class="mt-5 text-center">
@@ -118,17 +138,34 @@
 </template>
 
 <script setup>
-import { Link, useForm } from "@inertiajs/vue3";
+import { Link, router, usePage } from "@inertiajs/vue3";
 import AuthLayout from "../../Layouts/AuthLayout.vue";
 import loginImage from "@/assets/images/login.png";
+import { useForm } from "vee-validate";
+import * as yup from "yup";
+const page = usePage();
 
-const form = useForm({
-    email: "",
-    password: "",
+const { values, errors, defineField, handleSubmit, isSubmitting } = useForm({
+    validationSchema: yup.object({
+        email: yup.string().email().required(),
+        password: yup.string().required(),
+    }),
 });
 
-const submitLogin = () => {
-    form.post("/auth/login");
-    console.log({ form });
-};
+const [email, emailAttrs] = defineField("email", {
+    validateOnModelUpdate: false,
+});
+
+const [password, passwordAttrs] = defineField("password", {
+    validateOnModelUpdate: false,
+});
+
+const submitLogin = handleSubmit((values) => {
+    isSubmitting.value = true;
+    router.post("/auth/login", values, {
+        onFinish: () => {
+            isSubmitting.value = false;
+        },
+    });
+});
 </script>

@@ -14,6 +14,18 @@
 export default {
     name: "AuthLayout",
 };
+
+import { usePage } from "@inertiajs/vue3";
+import { computed, onMounted } from "vue";
+const page = usePage();
+
+// const user = computed(() => page.props);
+
+// console.log(user);
+console.log({ "tes1: ": page.props });
+
+// onMounted(() => {
+// });
 </script>
 
 <style>

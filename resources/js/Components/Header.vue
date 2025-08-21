@@ -50,66 +50,13 @@ const isProfileOpen = ref(false);
 const authUser = usePage().props.authUser;
 
 const loading = ref(false);
-// watch(
-//     () => page.props.flash,
-//     (newFlash) => {
-//         // Tambahkan kondisi untuk memastikan newFlash tidak undefined
-//         if (newFlash) {
-//             // Periksa apakah ada pesan 'success'
-//             if (newFlash.success) {
-//                 Swal.fire({
-//                     icon: "success",
-//                     title: "Berhasil!",
-//                     text: newFlash.success,
-//                     showConfirmButton: false,
-//                     timer: 3000,
-//                 });
-//             }
-
-//             // Periksa apakah ada pesan 'error'
-//             if (newFlash.error) {
-//                 Swal.fire({
-//                     icon: "error",
-//                     title: "Gagal!",
-//                     text: newFlash.error,
-//                     showConfirmButton: false,
-//                     timer: 3000,
-//                 });
-//             }
-//         }
-//     },
-//     { deep: true }
-// );
 
 const handleLogout = () => {
     loading.value = true;
 
-    router.post(
-        "/auth/logout",
-        {},
-        {
-            onSuccess: (page) => {
-                Swal.fire({
-                    title: "Sukses!",
-                    text: "Berhasil logout",
-                    icon: "success",
-                    timer: 2500,
-                });
-            },
-            onError: (errors) => {
-                Swal.fire({
-                    title: "Error!",
-                    text: "Terjadi kesalahan saat logout.",
-                    icon: "error",
-                    timer: 2500,
-                });
-                console.error(errors);
-            },
-            onFinish: () => {
-                loading.value = false;
-            },
-        }
-    );
+    console.log();
+
+    router.post("/auth/logout");
 };
 </script>
 

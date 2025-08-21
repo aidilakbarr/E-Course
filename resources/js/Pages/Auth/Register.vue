@@ -40,48 +40,73 @@
                     <form @submit.prevent="submitRegister" class="mt-8">
                         <div class="mx-auto max-w-xs">
                             <input
-                                v-model="form.name"
+                                v-model="name"
+                                v-bind="nameAttrs"
                                 class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white text-slate-600"
                                 type="text"
                                 placeholder="Name"
                             />
                             <div class="text-red-500 text-sm">
-                                {{ form.errors.name ?? "" }}
+                                {{ errors.name ?? "" }}
                             </div>
 
                             <input
-                                v-model="form.email"
+                                v-model="email"
+                                v-bind="emailAttrs"
                                 class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white text-slate-600 mt-5"
                                 type="email"
                                 placeholder="Email"
                             />
                             <div class="text-red-500 text-sm">
-                                {{ form.errors.email ?? "" }}
+                                {{ errors.email ?? "" }}
                             </div>
 
+                            <span
+                                v-if="page.props.errors.email"
+                                class="text-red-500"
+                            >
+                                {{ page.props.errors.email }}
+                            </span>
+
                             <input
-                                v-model="form.password"
+                                v-model="password"
+                                v-bind="passwordAttrs"
                                 class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white text-slate-600 mt-5"
                                 type="password"
                                 placeholder="Password"
                             />
                             <div class="text-red-500 text-sm">
-                                {{ form.errors.password ?? "" }}
+                                {{ errors.password ?? "" }}
                             </div>
 
+                            <span
+                                v-if="page.props.errors.password"
+                                class="text-red-500"
+                            >
+                                {{ page.props.errors.password }}
+                            </span>
+
+                            <span
+                                v-if="page.props.errors.login"
+                                class="text-red-500"
+                            >
+                                {{ page.props.errors.login }}
+                            </span>
+
                             <input
-                                v-model="form.password_confirmation"
+                                v-model="password_confirmation"
+                                v-bind="password_confirmationAttrs"
                                 class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white text-slate-600 mt-5"
                                 type="password"
                                 placeholder="Confirm Password"
                             />
                             <div class="text-red-500 text-sm">
-                                {{ form.errors.password_confirmation ?? "" }}
+                                {{ errors.password_confirmation ?? "" }}
                             </div>
 
                             <button
                                 type="submit"
-                                :disabled="form.processing"
+                                :disabled="isSubmitting"
                                 class="mt-5 tracking-wide font-semibold bg-green-400 text-white w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none cursor-pointer"
                             >
                                 <svg
@@ -99,7 +124,7 @@
                                     <path d="M20 8v6M23 11h-6" />
                                 </svg>
                                 <span class="ml-2">{{
-                                    form.processing ? "Loading..." : "Register"
+                                    isSubmitting ? "Loading..." : "Register"
                                 }}</span>
                             </button>
 
@@ -137,32 +162,42 @@
 <script setup lang="ts">
 import loginImage from "@/assets/images/login.png";
 import AuthLayout from "../../Layouts/AuthLayout.vue";
-import { Link, useForm } from "@inertiajs/vue3";
+import { Link, router, usePage } from "@inertiajs/vue3";
+import { useForm } from "vee-validate";
+import * as yup from "yup";
 
-const form = useForm({
-    name: "",
-    email: "",
-    password: "",
-    password_confirmation: "",
+const page = usePage();
+const { values, errors, defineField, handleSubmit, isSubmitting } = useForm({
+    validationSchema: yup.object({
+        name: yup.string().required().min(6),
+        email: yup.string().email().required(),
+        password: yup.string().required().min(6),
+        password_confirmation: yup.string().required().min(6),
+    }),
 });
 
-const submitRegister = () => {
-    try {
-        form.post("/auth/register");
-        Swal.fire({
-            title: "Sukses!",
-            text: "Berhasil logout",
-            icon: "success",
-            timer: 2500,
-        });
-    } catch (error) {
-        Swal.fire({
-            title: "Error!",
-            text: "Terjadi kesalahan saat logout.",
-            icon: "error",
-            timer: 2500,
-        });
-        console.error(errors);
+const [name, nameAttrs] = defineField("name", {
+    validateOnModelUpdate: false,
+});
+const [email, emailAttrs] = defineField("email", {
+    validateOnModelUpdate: false,
+});
+const [password, passwordAttrs] = defineField("password", {
+    validateOnModelUpdate: false,
+});
+const [password_confirmation, password_confirmationAttrs] = defineField(
+    "password_confirmation",
+    {
+        validateOnModelUpdate: false,
     }
-};
+);
+
+const submitRegister = handleSubmit((values) => {
+    isSubmitting.value = true;
+    router.post("/auth/register", values, {
+        onFinish: () => {
+            isSubmitting.value = false;
+        },
+    });
+});
 </script>

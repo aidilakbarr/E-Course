@@ -24,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         User::observe(LogObserver::class);
+
         Inertia::share([
             'authUser' => function () {
                 return auth()->user() ? [
@@ -31,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
                     'name' => auth()->user()->name,
                     'email' => auth()->user()->email,
                     'profile' => auth()->user()->profile,
+                    'role' => auth()->user()->role,
                 ] : null;
             },
         ]);
