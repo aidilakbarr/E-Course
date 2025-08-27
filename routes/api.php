@@ -25,7 +25,6 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => ['jwt.auth'],
     'as' => 'api.',
 ], function () {
     Route::get('show-dosen', [UserController::class, 'getDosens'])->name('show.getDosens');

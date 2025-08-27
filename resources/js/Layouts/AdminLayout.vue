@@ -80,6 +80,34 @@
 <script setup>
 import HeaderComponent from "@/Components/Header.vue";
 import SidebarComponent from "../Components/Sidebar.vue";
+import { usePage } from "@inertiajs/vue3";
+import { watch } from "vue";
+
+const page = usePage();
+
+watch(
+    () => page.props.flash,
+    (flash) => {
+        if (flash.success) {
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil",
+                text: flash.success,
+                timer: 2000,
+                showConfirmButton: false,
+            });
+        }
+
+        if (flash.error) {
+            Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: flash.error,
+            });
+        }
+    },
+    { deep: true }
+);
 </script>
 
 <style scoped>

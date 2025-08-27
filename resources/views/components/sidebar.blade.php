@@ -14,6 +14,7 @@
         class="absolute w-full upgrade-btn bottom-0 active-nav-link text-white flex items-center justify-center py-4">
         Dashboard V1.0.0
     </a>
+
 </aside>
 
 
@@ -71,7 +72,7 @@
                 laporan.innerHTML = `<i class="fas fa-chart-line mr-2"></i> Laporan Sistem`;
             } else {
                 laporan.style.display = "none";
-                matakuliah.href = "/set_krs_mhs"
+                matakuliah.href = "/krs/set_krs_mhs"
                 matakuliah.innerHTML = "Penawaran KRS"
             }
 

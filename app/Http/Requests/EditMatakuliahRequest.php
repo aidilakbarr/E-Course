@@ -32,15 +32,8 @@ class EditMatakuliahRequest extends FormRequest
             ->where('id', '!=', $id)
             ->exists();
 
-        Log::info("Apakah kode [$kode] dipakai oleh selain ID [$id]? " . ($exists ? 'YA' : 'TIDAK'));
-        Log::info('Request data:', $this->all());
-
+        // dd($kode, $id, $exists, request()->all());
         return [
-            'kode' => [
-                'required',
-                Rule::unique('mata_kuliahs', 'kode')
-                    ->ignore($id)
-            ],
             'nama' => ['required', 'string', 'max:100'],
             'semester' => ['required', 'integer'],
             'sks' => ['required', 'integer', 'in:2,3,4'],
@@ -62,22 +55,18 @@ class EditMatakuliahRequest extends FormRequest
             $ruangan = $this->ruangan;
             $jamMulai = $this->jam_mulai;
             $jamSelesai = $this->jam_selesai;
-
             $bentrok = MataKuliah::where('hari', $hari)
                 ->where('ruangan', $ruangan)
-                ->where(function ($query) use ($jamMulai, $jamSelesai) {
-                    $query
-                        ->whereBetween('jam_mulai', [$jamMulai, $jamSelesai])
-                        ->orWhereBetween('jam_selesai', [$jamMulai, $jamSelesai])
-                        ->orWhere(function ($q) use ($jamMulai, $jamSelesai) {
-                            $q->where('jam_mulai', '<=', $jamMulai)
-                                ->where('jam_selesai', '>=', $jamSelesai);
-                        });
+                ->where('id', '!=', $this->route('matakuliah')?->id ?? 0)
+                ->where(function ($q) use ($jamMulai, $jamSelesai) {
+                    $q->where('jam_mulai', '<', $jamSelesai)
+                        ->where('jam_selesai', '>', $jamMulai);
                 })
                 ->exists();
 
+            // dd($hari, $ruangan, $jamMulai, $jamSelesai, $bentrok, $this->route('matakuliah')?->id, request()->all());
             if ($bentrok) {
-                $validator->errors()->add('day', 'Jadwal bentrok dengan mata kuliah lain di ruangan ini.');
+                $validator->errors()->add('hari', 'Jadwal bentrok dengan mata kuliah lain di ruangan ini.');
             }
         });
     }

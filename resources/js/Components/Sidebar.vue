@@ -75,14 +75,14 @@
                             :href="
                                 userRole === 'ADMIN'
                                     ? '/matakuliah'
-                                    : '/set_krs_mhs'
+                                    : '/krs/set_krs_mhs'
                             "
                             :class="[
                                 'block text-black px-4 py-2 hover:bg-gray-100',
                                 isActive(
                                     userRole === 'ADMIN'
                                         ? '/matakuliah'
-                                        : '/set_krs_mhs'
+                                        : '/krs/set_krs_mhs'
                                 )
                                     ? 'bg-gray-200 font-bold'
                                     : '',

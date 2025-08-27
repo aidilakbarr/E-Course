@@ -19,14 +19,17 @@ class UserStoreRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
-        $isUpdate = $this->method() === 'PUT' || $this->method() === 'PATCH';
-        $userId = $this->route('user');
-        $dosenId = \App\Models\Dosen::where('user_id', $userId->id)->value('id');
+        $isUpdate = $this->isMethod('PUT') || $this->isMethod('PATCH');
+
+        $userParam = $this->route('user');
+        $userId = is_object($userParam) ? $userParam->id : $userParam;
+
+        $dosenId = $userId
+            ? \App\Models\Dosen::where('user_id', $userId)->value('id')
+            : null;
 
         $rules = [
             'profile_url' => ['sometimes', 'image', 'max:2048'],
@@ -38,16 +41,19 @@ class UserStoreRequest extends FormRequest
                 ? Rule::unique('users', 'email')->ignore($userId)
                 : Rule::unique('users', 'email'),
             ],
-            'password' => [
-                $isUpdate
-                ? ['nullable']
-                : ['required', 'min:6']
-            ],
+            'password' => $isUpdate ? ['nullable'] : ['required', 'min:6'],
             'role' => ['required', new Enum(RoleEnum::class)],
         ];
 
         if ($this->role === 'MAHASISWA') {
-            $rules['nim'] = ['required', 'string', 'max:20', 'unique:mahasiswas,nim'];
+            $rules['nim'] = [
+                'required',
+                'string',
+                'max:20',
+                $isUpdate
+                ? Rule::unique('mahasiswas', 'nim')->ignore($userId, 'user_id')
+                : Rule::unique('mahasiswas', 'nim'),
+            ];
             $rules['angkatan'] = ['required', 'integer'];
             $rules['prodi_mahasiswa'] = ['required', 'string'];
         }
@@ -59,12 +65,11 @@ class UserStoreRequest extends FormRequest
                 'max:30',
                 $isUpdate
                 ? Rule::unique('dosens', 'nidn')->ignore($dosenId)
-                : Rule::unique('dosens', 'nidn')
+                : Rule::unique('dosens', 'nidn'),
             ];
             $rules['prodi'] = ['required', 'string'];
         }
 
         return $rules;
     }
-
 }

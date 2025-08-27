@@ -33,7 +33,6 @@ class GenerateKrsPdf implements ShouldQueue
         $krs = Krs::with(['mahasiswa.user', 'matakuliahs'])->findOrFail($this->krsId);
         $mahasiswa = $krs->mahasiswa;
 
-
         $pdf = Pdf::loadView('pdf.krs', compact('krs', 'mahasiswa'));
 
         $filePath = 'pdf/krs_' . $krs->id . '.pdf';

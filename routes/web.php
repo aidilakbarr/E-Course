@@ -20,25 +20,16 @@ Route::prefix('auth')->middleware('guest')->controller(AuthController::class)->g
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::post('/edit-user', [userController::class, 'updateProfile']);
     Route::resource('users', UserController::class)->except(['show']);
-    Route::resource('matakuliah', MatakuliahController::class)->only(['index', 'create', 'edit']);
-    Route::get('/set_krs_mhs', [KrsController::class, 'index'])->name('set_krs_mhs.index');
-    Route::get('/pdf/krs/{krs}', [KrsController::class, 'krs_pdf'])->name('krs.pdf');
+    Route::prefix('krs')->as('krs.')->group(function () {
+        Route::get('/set_krs_mhs', [KrsController::class, 'index'])->name('set_krs_mhs.index');
+        Route::post('/store', [KrsController::class, 'store'])->name('krs.store');
+        Route::put('/submit', [KrsController::class, 'submit'])->name('krs.submit');
+        Route::delete('/{krs}/matakuliah/{matakuliah}', [KrsController::class, 'destroy'])->name('krs.destroy');
+        Route::get('/{krsId}/generate-pdf', [KrsController::class, 'krs_pdf']);
+        Route::get('/{krsId}/download-pdf', [KrsController::class, 'download_pdf']);
+    });
+    Route::resource('matakuliah', MatakuliahController::class)->except('show');
     Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
-    // Route::get('/pdf/krs/{krs}', function ($krs) {
-    //     return \App\Models\Krs::find($krs);
-    // });
-
-});
-
-Route::post('/store-token', [TokenSessionController::class, 'store']);
-
-// Route::delete('/auth/logout', function () {
-//     Session::forget('jwt_token');
-//     Session::flush();
-//     return response()->json(['message' => 'Logged out successfully']);
-// });
-
-Route::get('/inertia', function () {
-    return Inertia::render('Home');
 });

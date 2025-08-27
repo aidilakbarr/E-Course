@@ -33,7 +33,7 @@ class StoreMatakuliahRequest extends FormRequest
             'kapasitas' => ['required', 'integer', 'min:1'],
             'hari' => ['required', 'string'],
             'jam_mulai' => ['required', 'date_format:H:i'],
-            'jam_selesai' => ['required', 'date_format:H:i', 'after:jam_mulai'],
+            'jam_selesai' => ['required', 'date_format:H:i'],
             'ruangan' => ['required', 'string', 'max:20'],
         ];
     }

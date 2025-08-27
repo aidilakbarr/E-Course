@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\RoleEnum;
+use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
 use App\Services\FileUploadService;
@@ -198,4 +199,36 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'Gagal menghapus user: ' . $e->getMessage());
         }
     }
+
+    public function updateProfile(UpdateProfileRequest $request)
+    {
+        try {
+            $user = $request->user();
+            $data = $request->validated();
+
+            $user->name = $data['name'];
+            $user->email = $data['email'];
+
+            if (!empty($data['password'])) {
+                $user->password = Hash::make($data['password']);
+            }
+
+            if ($request->hasFile('profile')) {
+                $user->profile = FileUploadService::uploadProfile(
+                    $request->file('profile'),
+                    $user->profile
+                );
+            }
+
+            $user->save();
+
+            auth()->setUser(($user));
+
+            return redirect()->back()->with('success', 'Profil berhasil diedit');
+        } catch (\Throwable $e) {
+            report($e);
+            return redirect()->back()->with('error', 'Gagal mengedit user: ' . $e->getMessage());
+        }
+    }
+
 }
