@@ -6,23 +6,23 @@ use App\Enums\RoleEnum;
 use App\Enums\StatusCourseEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class Course extends Model
 {
     use HasFactory;
 
     protected $keyType = 'string';
+
     protected $fillable = [
         'thumbnail',
         'title',
         'description',
         'instructor_id',
-        'status'
+        'status',
     ];
 
     protected $casts = [
-        'status' => StatusCourseEnum::class
+        'status' => StatusCourseEnum::class,
     ];
 
     public function instructor()
@@ -45,9 +45,9 @@ class Course extends Model
         return $this->hasMany(Enrollment::class);
     }
 
-    function getThumbnailUrlAttribute()
+    public function getThumbnailUrlAttribute()
     {
-        return asset('storage/' . $this->thumbnail);
+        return asset('storage/'.$this->thumbnail);
     }
 
     public function getTitleAttribute($value)
@@ -55,25 +55,26 @@ class Course extends Model
         return ucwords($value);
     }
 
-
     public function scopeByRole($query)
     {
         $user = auth()->user();
+
         return $user->isAdmin()
             ? $query
             : $query->where('instructor_id', $user->id);
     }
+
     public function scopeFilter($query, array $filters)
     {
         return $query
-            ->when($filters['instructor_id'] ?? null, fn($q, $id) => $q->where('instructor_id', $id))
+            ->when($filters['instructor_id'] ?? null, fn ($q, $id) => $q->where('instructor_id', $id))
             ->when(
                 filled($filters['status'] ?? null) && StatusCourseEnum::tryFrom($filters['status']),
-                fn($q) => $q->where('status', StatusCourseEnum::from($filters['status']))
+                fn ($q) => $q->where('status', StatusCourseEnum::from($filters['status']))
             )
             ->when(
                 filled($filters['role'] ?? null) && RoleEnum::tryFrom($filters['role']),
-                fn($q) => $q->whereHas('instructor', fn($q2) => $q2->where('role', RoleEnum::from($filters['role'])))
+                fn ($q) => $q->whereHas('instructor', fn ($q2) => $q2->where('role', RoleEnum::from($filters['role'])))
             );
 
     }
@@ -87,8 +88,9 @@ class Course extends Model
 
     public function scopeSearch($query, $keyword)
     {
-        if (!$keyword)
+        if (! $keyword) {
             return $query;
+        }
 
         return $query->where(function ($q) use ($keyword) {
             $q->where('title', 'like', "%{$keyword}%")
@@ -99,5 +101,3 @@ class Course extends Model
         });
     }
 }
-
-

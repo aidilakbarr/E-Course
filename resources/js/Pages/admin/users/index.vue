@@ -88,7 +88,6 @@
                                 <th class="w-[20%] px-4 py-2">Nama</th>
                                 <th class="w-[25%] px-4 py-2">Email</th>
                                 <th class="w-[15%] px-4 py-2">Role</th>
-                                <th class="w-[10%] px-4 py-2">Status</th>
                                 <th class="w-[20%] px-4 py-2">Aksi</th>
                             </tr>
                         </thead>
@@ -98,7 +97,7 @@
                                     <img
                                         :src="
                                             user.profile
-                                                ? user.profile
+                                                ? `/storage/${user.profile}`
                                                 : `https://ui-avatars.com/api/?name=${encodeURIComponent(
                                                       user.name
                                                   )}&background=random&color=fff`
@@ -147,22 +146,6 @@
                                             }"
                                         ></i>
                                         {{ user.role }}
-                                    </span>
-                                </td>
-                                <td class="text-center">
-                                    <span
-                                        class="inline-block px-2 py-1 text-xs font-semibold rounded-full"
-                                        :class="
-                                            user.email_verified_at
-                                                ? 'bg-green-100 text-green-800'
-                                                : 'bg-gray-100 text-gray-700'
-                                        "
-                                    >
-                                        {{
-                                            user.email_verified_at
-                                                ? "Verified"
-                                                : "Unverified"
-                                        }}
                                     </span>
                                 </td>
                                 <td class="text-center">
@@ -233,6 +216,7 @@ import { computed, ref } from "vue";
 import AdminLayout from "../../../Layouts/AdminLayout.vue";
 import { Link, router, usePage } from "@inertiajs/vue3";
 const page = usePage();
+import * as yup from "yup";
 
 const users = computed(() => page.props.users.data);
 const pagination = computed(() => page.props.users);
@@ -240,6 +224,10 @@ const pagination = computed(() => page.props.users);
 const search = ref(page.props.filters?.search || "");
 
 const showImportForm = ref(false);
+
+const schema = yup.object({
+    file: yup.mixed(),
+});
 
 const goToPage = (pageNumber) => {
     if (pageNumber < 1 || pageNumber > pagination.value.last_page) return;
@@ -275,21 +263,6 @@ const handleDelete = (id, name) => {
             router.delete(`/users/${id}`, {
                 preserveScroll: true,
                 preserveState: false,
-                onSuccess: () => {
-                    Swal.fire(
-                        "Terhapus!",
-                        `User ${name} berhasil dihapus.`,
-                        "success"
-                    );
-                    router.reload({ only: ["users"] });
-                },
-                onError: () => {
-                    Swal.fire(
-                        "Gagal!",
-                        `User ${name} tidak bisa dihapus.`,
-                        "error"
-                    );
-                },
             });
         }
     });

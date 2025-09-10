@@ -24,10 +24,11 @@ class RedirectIfAuthenticated
                 if ($user->role === RoleEnum::ADMIN || $user->role === RoleEnum::KAPRODI) {
                     return redirect(route('dashboard.index'));
                 }
+
                 return redirect(route('dashboard.index'));
             }
         }
+
         return $next($request);
     }
-
 }

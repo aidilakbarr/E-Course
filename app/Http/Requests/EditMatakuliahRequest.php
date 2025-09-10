@@ -4,8 +4,6 @@ namespace App\Http\Requests;
 
 use App\Models\MataKuliah;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
 class EditMatakuliahRequest extends FormRequest
@@ -70,5 +68,4 @@ class EditMatakuliahRequest extends FormRequest
             }
         });
     }
-
 }

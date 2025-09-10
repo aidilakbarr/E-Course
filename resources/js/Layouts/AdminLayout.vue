@@ -81,13 +81,15 @@
 import HeaderComponent from "@/Components/Header.vue";
 import SidebarComponent from "../Components/Sidebar.vue";
 import { usePage } from "@inertiajs/vue3";
-import { watch } from "vue";
+import { watch, watchEffect } from "vue";
+import { setAuthUser } from "../services/authServices";
 
 const page = usePage();
 
 watch(
     () => page.props.flash,
     (flash) => {
+        console.log(page.props.flash);
         if (flash.success) {
             Swal.fire({
                 icon: "success",
@@ -106,8 +108,12 @@ watch(
             });
         }
     },
-    { deep: true }
+    { deep: true, immediate: true }
 );
+
+watchEffect(() => {
+    setAuthUser(page.props.authUser);
+});
 </script>
 
 <style scoped>

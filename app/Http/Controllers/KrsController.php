@@ -18,7 +18,7 @@ class KrsController extends Controller
     {
         $mahasiswaId = Auth::user()->mahasiswa->id;
 
-        $matakuliah = MataKuliah::all()->map(fn($matkul) => [
+        $matakuliah = MataKuliah::all()->map(fn ($matkul) => [
             'id' => $matkul->id,
             'kode' => $matkul->kode,
             'nama' => $matkul->nama,
@@ -38,7 +38,7 @@ class KrsController extends Controller
             'matakuliah' => $matakuliah,
             'krs' => $krs ? [
                 'id' => $krs->id,
-                'matakuliahs' => $krs->matakuliahs->map(fn($matkul) => [
+                'matakuliahs' => $krs->matakuliahs->map(fn ($matkul) => [
                     'id' => $matkul->id,
                     'kode' => $matkul->kode,
                     'nama' => $matkul->nama,
@@ -107,6 +107,7 @@ class KrsController extends Controller
     public function krs_pdf($krsId)
     {
         GenerateKrsPdf::dispatch((int) $krsId);
+
         return back()->with('success', 'PDF sedang diproses...');
     }
 
@@ -114,16 +115,16 @@ class KrsController extends Controller
     {
         $krs = Krs::findOrFail($krsId);
 
-        if (!$krs->pdf_generated) {
+        if (! $krs->pdf_generated) {
             return response()->json(['ready' => false], 202);
         }
 
-        $filePath = 'pdf/krs_' . $krs->id . '.pdf';
+        $filePath = 'pdf/krs_'.$krs->id.'.pdf';
 
-        if (!Storage::disk('public')->exists($filePath)) {
+        if (! Storage::disk('public')->exists($filePath)) {
             return response()->json(['error' => 'PDF belum tersedia.'], 404);
         }
 
-        return response()->file(storage_path('app/public/' . $filePath));
+        return response()->file(storage_path('app/public/'.$filePath));
     }
 }

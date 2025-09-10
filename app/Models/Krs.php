@@ -12,7 +12,7 @@ class Krs extends Model
     protected $fillable = [
         'mahasiswa_id',
         'status',
-        'pdf_generated'
+        'pdf_generated',
     ];
 
     public function mahasiswa()
@@ -24,5 +24,4 @@ class Krs extends Model
     {
         return $this->belongsToMany(Matakuliah::class, 'krs_mata_kuliah');
     }
-
 }

@@ -141,6 +141,7 @@ import { useActive } from "../composables/useActive";
 
 const page = usePage();
 const userRole = computed(() => page.props.authUser?.role ?? null);
+console.log(userRole);
 
 const akademikOpen = ref(false);
 const sidebarVisible = ref(true);

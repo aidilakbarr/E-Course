@@ -8,15 +8,14 @@ use App\Http\Requests\RegisterUserRequest;
 use App\Http\Resources\UserResource;
 use App\Jobs\SendWelcomeEmail;
 use App\Models\User;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -24,6 +23,7 @@ class AuthController extends Controller
     {
         return auth()->factory()->getTTL() * 60;
     }
+
     public function register(RegisterUserRequest $request)
     {
         try {
@@ -39,15 +39,16 @@ class AuthController extends Controller
                 'user' => new UserResource($user),
                 'access_token' => $accessToken,
                 'token_type' => 'bearer',
-                'expires_in' => $this->tokenTTL()
+                'expires_in' => $this->tokenTTL(),
             ], 201);
         } catch (ValidationException $e) {
-            return errorResponse("Validasi gagal", [
+            return errorResponse('Validasi gagal', [
                 'errors' => $e->errors(),
             ], 422);
         } catch (\Throwable $th) {
             report($th);
-            return errorResponse("Terjadi kesalahan saat registrasi", [
+
+            return errorResponse('Terjadi kesalahan saat registrasi', [
                 'error' => $th->getMessage(),
             ], 500);
         }
@@ -57,7 +58,7 @@ class AuthController extends Controller
     {
         try {
             $credentials = $request->validated();
-            if (!$accessToken = auth()->attempt($credentials)) {
+            if (! $accessToken = auth()->attempt($credentials)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Email atau password salah',
@@ -69,21 +70,23 @@ class AuthController extends Controller
                 'user' => new UserResource($user),
                 'access_token' => $accessToken,
                 'token_type' => 'bearer',
-                'expires_in' => $this->tokenTTL()
+                'expires_in' => $this->tokenTTL(),
             ]);
         } catch (JWTException $e) {
             report($e);
+
             return errorResponse('Gagal Membuat token', [
                 'error' => $e->getMessage(),
             ], 500);
         }
     }
+
     public function me()
     {
         try {
             $user = auth()->user();
 
-            if (!$user) {
+            if (! $user) {
                 return errorResponse('Tidak terauthentikasi');
             }
 
@@ -106,6 +109,7 @@ class AuthController extends Controller
             ], 401);
         } catch (\Throwable $th) {
             report($th);
+
             return errorResponse('Terjadi kesalahan saat mengambil data user', [
                 'error' => $th->getMessage(),
             ], 500);
@@ -116,23 +120,26 @@ class AuthController extends Controller
     {
         try {
             auth()->logout();
+
             return successResponse('Berhasil logout');
         } catch (\Throwable $th) {
             report($th);
+
             return errorResponse('Gagal logout', [
                 'error' => $th->getMessage(),
             ], 500);
         }
     }
+
     public function refresh(Request $request)
     {
         try {
             $refreshToken = $request->input('refresh_token');
 
-            if (!$refreshToken) {
+            if (! $refreshToken) {
                 $refreshToken = $request->bearerToken();
-                if (!$refreshToken) {
-                    throw new \Exception("Refresh token tidak ditemukan di request body atau Authorization header.");
+                if (! $refreshToken) {
+                    throw new \Exception('Refresh token tidak ditemukan di request body atau Authorization header.');
                 }
             }
             $newAccessToken = auth()->setToken($refreshToken)->refresh();
@@ -143,7 +150,7 @@ class AuthController extends Controller
                 'access_token' => $newAccessToken,
                 'refresh_token' => $newRefreshToken,
                 'token_type' => 'bearer',
-                'expires_in' => $this->tokenTTL()
+                'expires_in' => $this->tokenTTL(),
             ]);
         } catch (TokenExpiredException $e) {
             return errorResponse('Sesi berakhir. Refresh token kadaluarsa. Silakan login ulang', [
@@ -155,6 +162,7 @@ class AuthController extends Controller
             ], 401);
         } catch (\Throwable $th) {
             report($th);
+
             return errorResponse('Gagal memperbarui token', [
                 'error' => $th->getMessage(),
             ], 401);

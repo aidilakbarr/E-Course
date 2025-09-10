@@ -16,10 +16,9 @@ class AdminOnly
      */
     public function handle(Request $request, Closure $next): Response
     {
-    if (auth()->check() && (auth()->user()->role === RoleEnum::ADMIN)) {
-        return $next($request);
-    }
-
+        if (auth()->check() && (auth()->user()->role === RoleEnum::ADMIN)) {
+            return $next($request);
+        }
 
         return redirect(route('admin.dashboard.index'))->with('error', 'Akses khusus admin.');
     }

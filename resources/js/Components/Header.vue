@@ -53,30 +53,24 @@
 import { ref, watch } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import ProfileModal from "../modals/ProfileModal.vue";
+import { authUser } from "../services/authServices";
 
 const isOpen = ref(false);
 const showModal = ref(false);
 const selectedUser = ref({});
-const authUser = usePage().props.authUser;
-
 const loading = ref(false);
 
 const openProfile = () => {
-    selectedUser.value = authUser;
+    selectedUser.value = { ...authUser.value };
     showModal.value = true;
-    console.log(selectedUser);
 };
 
 const handleUpdateProfile = (data) => {
-    console.log("Data : ", data);
     router.post("edit-user", data);
 };
 
 const handleLogout = () => {
     loading.value = true;
-
-    console.log();
-
     router.post("/auth/logout");
 };
 </script>

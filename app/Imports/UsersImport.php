@@ -1,13 +1,13 @@
 <?php
+
 namespace App\Imports;
 
-use App\Models\User;
 use App\Models\Mahasiswa;
+use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 
 class UsersImport implements ToCollection, WithHeadingRow
 {
@@ -31,9 +31,8 @@ class UsersImport implements ToCollection, WithHeadingRow
                     'angkatan' => $row['angkatan'],
                 ]);
             } catch (\Throwable $e) {
-                \Log::error("Gagal import row: " . json_encode($row) . " - Error: " . $e->getMessage());
+                \Log::error('Gagal import row: '.json_encode($row).' - Error: '.$e->getMessage());
             }
         }
     }
-
 }

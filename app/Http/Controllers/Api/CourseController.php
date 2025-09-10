@@ -10,7 +10,6 @@ use App\Http\Resources\UserResource;
 use App\Models\Course;
 use App\Services\FileUploadService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class CourseController extends Controller
 {
@@ -58,7 +57,6 @@ class CourseController extends Controller
                 $validated['instructor_id'] = $user->id;
             }
 
-
             $course = Course::create($validated);
 
             return response()->json([
@@ -75,6 +73,7 @@ class CourseController extends Controller
             ], 422);
         } catch (\Throwable $e) {
             report($e);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menyimpan course',
@@ -86,6 +85,7 @@ class CourseController extends Controller
     public function show(Course $course)
     {
         $course->load('instructor');
+
         return response()->json([
             'success' => true,
             'data' => new CourseResource($course),
@@ -112,7 +112,6 @@ class CourseController extends Controller
         ]);
     }
 
-
     public function destroy(Course $course)
     {
         try {
@@ -123,7 +122,7 @@ class CourseController extends Controller
             ) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Tidak punya akses untuk menghapus course ini'
+                    'message' => 'Tidak punya akses untuk menghapus course ini',
                 ], 403);
             }
 
@@ -135,10 +134,11 @@ class CourseController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => "Course berhasil dihapus"
+                'message' => 'Course berhasil dihapus',
             ]);
         } catch (\Throwable $e) {
             report($e);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menghapus course',
@@ -151,6 +151,7 @@ class CourseController extends Controller
     public function Filtering(Request $request)
     {
         $courses = Course::filter($request->only(['instructor_id', 'role', 'status']))->paginate(5);
+
         return CourseResource::collection($courses)
             ->additional([
                 'success' => true,

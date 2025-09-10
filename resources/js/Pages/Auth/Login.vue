@@ -36,6 +36,7 @@
                             <input
                                 v-model="email"
                                 v-bind="emailAttrs"
+                                name="email"
                                 type="email"
                                 class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white text-slate-600"
                                 placeholder="Email"
@@ -53,6 +54,7 @@
                             <input
                                 v-model="password"
                                 v-bind="passwordAttrs"
+                                name="password"
                                 type="password"
                                 class="mt-5 w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white text-slate-600"
                                 placeholder="Password"

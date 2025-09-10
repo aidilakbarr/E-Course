@@ -16,6 +16,7 @@ class ImportUsersJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $filePath;
+
     /**
      * Create a new job instance.
      */

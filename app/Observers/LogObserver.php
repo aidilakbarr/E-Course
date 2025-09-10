@@ -10,7 +10,7 @@ class LogObserver
 {
     public function created(Model $model)
     {
-        Log::channel('activity')->info('Created ' . $model->getTable(), [
+        Log::channel('activity')->info('Created '.$model->getTable(), [
             'user_id' => Auth::id(),
             'data' => $model->getAttributes(),
         ]);
@@ -18,7 +18,7 @@ class LogObserver
 
     public function updated(Model $model)
     {
-        Log::channel('activity')->info('Updated ' . $model->getTable(), [
+        Log::channel('activity')->info('Updated '.$model->getTable(), [
             'user_id' => Auth::id(),
             'original' => $model->getOriginal(),
             'changes' => $model->getChanges(),
@@ -27,7 +27,7 @@ class LogObserver
 
     public function deleted(Model $model)
     {
-        Log::channel('activity')->info('Deleted ' . $model->getTable(), [
+        Log::channel('activity')->info('Deleted '.$model->getTable(), [
             'user_id' => Auth::id(),
             'data' => $model->getOriginal(),
         ]);

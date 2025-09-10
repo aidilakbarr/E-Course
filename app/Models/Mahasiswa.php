@@ -41,6 +41,4 @@ class Mahasiswa extends Model
         return $this->belongsToMany(Matakuliah::class, 'krs')
             ->withPivot('semester', 'sks', 'status');
     }
-
-
 }

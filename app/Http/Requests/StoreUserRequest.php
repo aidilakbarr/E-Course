@@ -21,18 +21,17 @@ class StoreUserRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-   public function rules(): array
-{
-    
-    return [
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email',
-        'password' => 'required|min:6',
-        'role' => [
-                'required',
-                Rule::in(array_column(RoleEnum::cases(), 'value'))
-            ],
-    ];
-}
+    public function rules(): array
+    {
 
+        return [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
+            'role' => [
+                'required',
+                Rule::in(array_column(RoleEnum::cases(), 'value')),
+            ],
+        ];
+    }
 }

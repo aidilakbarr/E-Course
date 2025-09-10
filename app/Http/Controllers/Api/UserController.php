@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Resources\UserResource;
-use App\Imports\UsersImport;
 use App\Jobs\ImportUsersJob;
 use App\Models\Dosen;
 use App\Models\User;
@@ -16,7 +15,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Maatwebsite\Excel\Facades\Excel;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserController extends Controller
@@ -33,8 +31,7 @@ class UserController extends Controller
         $users = Cache::remember(
             $cacheKey,
             now()->addMinutes(10),
-            fn() =>
-            User::search($search)
+            fn () => User::search($search)
                 ->latest()
                 ->paginate(5)
                 ->withQueryString()
@@ -100,6 +97,7 @@ class UserController extends Controller
             ], 201);
         } catch (\Throwable $th) {
             DB::rollBack();
+
             return response()->json([
                 'success' => false,
                 'message' => 'User created failed.',
@@ -107,15 +105,13 @@ class UserController extends Controller
             ], 500);
         }
 
-
     }
-
 
     public function show(User $user)
     {
         return response()->json([
             'success' => true,
-            'data' => new UserResource($user)
+            'data' => new UserResource($user),
         ]);
     }
 
@@ -123,14 +119,13 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-        if (!empty($data['password'])) {
+        if (! empty($data['password'])) {
             $user->password = Hash::make($data['password']);
         }
 
         if ($request->hasFile('profile_url')) {
             $user->profile = FileUploadService::uploadProfile($request->file('profile_url'), $user->profile);
         }
-
 
         $user->save();
 
@@ -146,12 +141,12 @@ class UserController extends Controller
         try {
             $userNow = auth()->user();
             if (
-                $user->role == !RoleEnum::ADMIN &&
+                $user->role == ! RoleEnum::ADMIN &&
                 $user->id !== $userNow->id
             ) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Tidak punya akses untuk menghapus user ini'
+                    'message' => 'Tidak punya akses untuk menghapus user ini',
                 ], 403);
             }
 
@@ -163,10 +158,11 @@ class UserController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => "Course berhasil dihapus"
+                'message' => 'Course berhasil dihapus',
             ]);
         } catch (\Throwable $e) {
             report($e);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menghapus course',
@@ -174,7 +170,6 @@ class UserController extends Controller
             ], 500);
         }
     }
-
 
     public function updateProfile(UpdateProfileRequest $request)
     {
@@ -185,7 +180,7 @@ class UserController extends Controller
             $user->name = $data['name'];
             $user->email = $data['email'];
 
-            if (!empty($data['password'])) {
+            if (! empty($data['password'])) {
                 $user->password = Hash::make($data['password']);
             }
 
@@ -225,7 +220,7 @@ class UserController extends Controller
     public function importMahasiswa(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv'
+            'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 
         $path = $request->file('file')->store('imports');
@@ -235,7 +230,7 @@ class UserController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => "Proses import sedang berjalan. Anda akan mendapat notifikasi setelah selesai."
+                'message' => 'Proses import sedang berjalan. Anda akan mendapat notifikasi setelah selesai.',
             ], 200);
         } catch (\Throwable $e) {
             return response()->json([
@@ -244,5 +239,4 @@ class UserController extends Controller
             ], 500);
         }
     }
-
 }

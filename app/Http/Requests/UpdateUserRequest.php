@@ -21,9 +21,9 @@ class UpdateUserRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-   public function rules(): array
-{
-    return [
+    public function rules(): array
+    {
+        return [
             'name' => 'required|string|max:255',
             'email' => [
                 'required',
@@ -36,6 +36,5 @@ class UpdateUserRequest extends FormRequest
                 Rule::in(array_column(RoleEnum::cases(), 'value')),
             ],
         ];
-}
-
+    }
 }

@@ -40,8 +40,9 @@ class MataKuliah extends Model
 
     public function scopeSearch($query, $keyword)
     {
-        if (!$keyword)
+        if (! $keyword) {
             return $query;
+        }
 
         return $query->where(function ($q) use ($keyword) {
             $q->where('kode', 'like', "%{$keyword}%")

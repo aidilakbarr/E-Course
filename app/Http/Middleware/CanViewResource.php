@@ -13,13 +13,12 @@ class CanViewResource
         $user = auth('api')->user();
         dd($user);
 
-        if (!in_array($user->role, ['ADMIN', 'USER'])) {
+        if (! in_array($user->role, ['ADMIN', 'USER'])) {
             return response()->json([
-                'message' => 'Unauthorized to view this resource.'
+                'message' => 'Unauthorized to view this resource.',
             ], 403);
         }
 
         return $next($request);
     }
 }
-

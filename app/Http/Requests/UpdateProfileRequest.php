@@ -22,10 +22,10 @@ class UpdateProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=> "required|string|max:255",
-            'email'=>"required|email",
-            'password'=>'nullable|min:6',
-            'profile'=>'nullable'
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'password' => 'nullable|min:6',
+            'profile' => 'nullable',
         ];
     }
 }

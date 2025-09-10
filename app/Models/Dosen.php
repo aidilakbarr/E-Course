@@ -24,5 +24,4 @@ class Dosen extends Model
     {
         return $this->hasMany(Kelas::class);
     }
-
 }

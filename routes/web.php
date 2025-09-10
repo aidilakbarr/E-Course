@@ -3,12 +3,9 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KrsController;
-use App\Http\Controllers\LectureController;
 use App\Http\Controllers\MatakuliahController;
-use App\Http\Controllers\TokenSessionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 // Auth
 Route::prefix('auth')->middleware('guest')->controller(AuthController::class)->group(function () {
@@ -20,6 +17,7 @@ Route::prefix('auth')->middleware('guest')->controller(AuthController::class)->g
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::post('/import-user', [userController::class, 'importMahasiswa']);
     Route::post('/edit-user', [userController::class, 'updateProfile']);
     Route::resource('users', UserController::class)->except(['show']);
     Route::prefix('krs')->as('krs.')->group(function () {

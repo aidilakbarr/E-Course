@@ -1,11 +1,11 @@
 <?php
+
 namespace App\Http\Middleware;
 
 use App\Enums\RoleEnum;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AdminOrInstructor
 {
@@ -20,6 +20,4 @@ class AdminOrInstructor
 
         return redirect()->route('user.home.index')->with('error', 'Akses khusus admin/instructor.');
     }
-
 }
-

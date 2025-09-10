@@ -6,7 +6,6 @@ use App\Http\Requests\EditMatakuliahRequest;
 use App\Http\Requests\StoreMatakuliahRequest;
 use App\Models\Dosen;
 use App\Models\MataKuliah;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class MatakuliahController extends Controller
@@ -17,7 +16,7 @@ class MatakuliahController extends Controller
 
         $data = MataKuliah::with('dosen.user')
             ->search($search)
-            ->paginate(10)
+            ->paginate(5)
             ->withQueryString();
 
         return Inertia::render('admin/matakuliah/index', [
@@ -28,13 +27,12 @@ class MatakuliahController extends Controller
         ]);
     }
 
-
-
     public function create()
     {
         $dosens = Dosen::with('user')
             ->latest()
             ->get();
+
         return Inertia::render('admin/matakuliah/create', ['dosens' => $dosens]);
     }
 
@@ -46,12 +44,14 @@ class MatakuliahController extends Controller
         try {
             $data = $request->validated();
             Matakuliah::create($data);
-            return redirect()->back()->with('success', "Matakuliah berhasil ditambahkan");
+
+            return redirect()->back()->with('success', 'Matakuliah berhasil ditambahkan');
         } catch (\Illuminate\Validation\ValidationException $e) {
-            return redirect()->back()->with('error', "validasi gagal");
+            return redirect()->back()->with('error', 'validasi gagal');
         } catch (\Throwable $e) {
             report($e);
-            return redirect()->back()->with('error', "Gagal menyimpan course");
+
+            return redirect()->back()->with('error', 'Gagal menyimpan course');
         }
     }
 
@@ -69,7 +69,8 @@ class MatakuliahController extends Controller
     public function edit(Matakuliah $matakuliah)
     {
         $dosens = Dosen::with('user')->get();
-        return Inertia::render('admin/matakuliah/edit', ["matakuliah" => $matakuliah, 'dosens' => $dosens]);
+
+        return Inertia::render('admin/matakuliah/edit', ['matakuliah' => $matakuliah, 'dosens' => $dosens]);
     }
 
     /**
@@ -78,6 +79,7 @@ class MatakuliahController extends Controller
     public function update(EditMatakuliahRequest $request, Matakuliah $matakuliah)
     {
         $matakuliah->update($request->validated());
+
         return redirect()->route('matakuliah.index')
             ->with('success', 'Matakuliah berhasil di edit');
     }
@@ -88,6 +90,7 @@ class MatakuliahController extends Controller
     public function destroy(Matakuliah $matakuliah)
     {
         $matakuliah->delete();
-        return redirect()->back()->with("success", "Data berhasil dihapus");
+
+        return redirect()->back()->with('success', 'Data berhasil dihapus');
     }
 }

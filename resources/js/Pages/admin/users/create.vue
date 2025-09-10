@@ -13,21 +13,112 @@
                             @submit.prevent="onSubmit"
                             class="p-10 bg-white rounded shadow-xl"
                         >
-                            <div class="mb-4">
-                                <label
-                                    class="block text-sm text-gray-600"
-                                    for="add-profile_url"
-                                    >Profile Photo</label
+                            <div class="flex items-center justify-center">
+                                <div
+                                    class="mx-auto w-full max-w-[550px] bg-white"
                                 >
-                                <input
-                                    type="file"
-                                    class="w-full px-5 py-2 bg-gray-200 rounded"
-                                />
-                                <p class="text-sm text-red-500 mt-1">
-                                    {{ errors.photo }}
-                                </p>
-                            </div>
+                                    <div class="mb-6 pt-4">
+                                        <label
+                                            class="mb-5 block text-xl font-semibold text-[#07074D]"
+                                        >
+                                            Upload Profile
+                                        </label>
 
+                                        <!-- Input Hidden -->
+                                        <input
+                                            type="file"
+                                            id="file"
+                                            class="sr-only"
+                                            @change="onFileChange"
+                                        />
+
+                                        <!-- Dropzone -->
+                                        <label
+                                            for="file"
+                                            class="relative flex min-h-[200px] items-center justify-center rounded-md border border-dashed border-[#e0e0e0] p-12 text-center cursor-pointer hover:bg-gray-50"
+                                        >
+                                            <div v-if="!file">
+                                                <span
+                                                    class="mb-2 block text-xl font-semibold text-[#07074D]"
+                                                >
+                                                    Drop files here
+                                                </span>
+                                                <span
+                                                    class="mb-2 block text-base font-medium text-[#6B7280]"
+                                                >
+                                                    Or
+                                                </span>
+                                                <span
+                                                    class="inline-flex rounded border border-[#e0e0e0] py-2 px-7 text-base font-medium text-[#07074D]"
+                                                >
+                                                    Browse
+                                                </span>
+                                            </div>
+
+                                            <!-- Preview jika file ada -->
+                                            <div v-else class="text-center">
+                                                <img
+                                                    v-if="previewUrl"
+                                                    :src="previewUrl"
+                                                    class="mx-auto h-32 w-32 object-cover rounded-full mb-3"
+                                                />
+                                                <p
+                                                    class="text-base font-medium text-[#07074D] truncate"
+                                                >
+                                                    {{ file.name }}
+                                                </p>
+                                            </div>
+                                        </label>
+
+                                        <!-- Info file + tombol hapus -->
+                                        <div
+                                            v-if="file"
+                                            class="mt-5 rounded-md bg-[#F5F7FB] py-4 px-8"
+                                        >
+                                            <div
+                                                class="flex items-center justify-between"
+                                            >
+                                                <span
+                                                    class="truncate pr-3 text-base font-medium text-[#07074D]"
+                                                >
+                                                    {{ file.name }}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    class="text-[#07074D]"
+                                                    @click="removeFile"
+                                                >
+                                                    <svg
+                                                        width="12"
+                                                        height="12"
+                                                        viewBox="0 0 10 10"
+                                                        fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                    >
+                                                        <path
+                                                            fill-rule="evenodd"
+                                                            clip-rule="evenodd"
+                                                            d="M0.28 0.28c.37-.37.97-.37 1.35 0L9.72 8.37c.37.37.37.97 0 1.35-.37.37-.97.37-1.35 0L0.28 1.63c-.37-.37-.37-.97 0-1.35z"
+                                                            fill="currentColor"
+                                                        />
+                                                        <path
+                                                            fill-rule="evenodd"
+                                                            clip-rule="evenodd"
+                                                            d="M0.28 9.72c-.37-.37-.37-.97 0-1.35L8.37.28c.37-.37.97-.37 1.35 0 .37.37.37.97 0 1.35L1.63 9.72c-.37.37-.97.37-1.35 0z"
+                                                            fill="currentColor"
+                                                        />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Error dari vee-validate -->
+                                        <p class="text-sm text-red-500 mt-2">
+                                            {{ errors.profile }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="mb-4">
                                 <label
                                     class="block text-sm text-gray-600"
@@ -52,6 +143,7 @@
                                     >Email</label
                                 >
                                 <input
+                                    name="email"
                                     type="email"
                                     class="w-full px-5 py-2 bg-gray-200 rounded"
                                     required
@@ -132,7 +224,8 @@
                                         >Angkatan</label
                                     >
                                     <input
-                                        type="text"
+                                        type="
+                                        "
                                         class="w-full px-5 py-2 bg-gray-200 rounded"
                                         v-model="angkatan"
                                     />
@@ -192,10 +285,11 @@
     </AdminLayout>
 </template>
 <script setup>
-import { useForm } from "vee-validate";
+import { useField, useForm } from "vee-validate";
 import AdminLayout from "../../../Layouts/AdminLayout.vue";
 import { router, usePage } from "@inertiajs/vue3";
 import * as yup from "yup";
+import { computed } from "vue";
 
 const schema = yup.object({
     name: yup
@@ -239,9 +333,10 @@ const schema = yup.object({
     }),
 });
 
-const { values, handleSubmit, errors, defineField, isSubmitting } = useForm({
-    validationSchema: schema,
-});
+const { values, handleSubmit, errors, defineField, isSubmitting, setErrors } =
+    useForm({
+        validationSchema: schema,
+    });
 
 const [name] = defineField("name", {
     validateOnModelUpdate: false,
@@ -265,10 +360,43 @@ const [angkatan] = defineField("angkatan");
 const [nidn] = defineField("nidn");
 const [prodi] = defineField("prodi");
 
+const { value: file, setValue } = useField("profile");
+
+const onFileChange = (e) => {
+    const selected = e.target.files[0];
+    setValue(selected || null);
+};
+
+const removeFile = () => {
+    setValue(null);
+};
+
+const previewUrl = computed(() => {
+    if (!file.value) return null;
+    if (file.value instanceof File && file.value.type.startsWith("image/")) {
+        return URL.createObjectURL(file.value);
+    }
+    return null;
+});
+
 const onSubmit = handleSubmit((values) => {
     isSubmitting.value = true;
-    router.post("/users", values, {
-        onFinish: () => (isSubmitting.value = false),
+
+    const formData = new FormData();
+    Object.keys(values).forEach((key) => {
+        formData.append(key, values[key]);
+    });
+
+    console.log([...formData.entries()]);
+
+    router.post("/users", formData, {
+        forceFormData: true,
+        onFinish: () => {
+            isSubmitting.value = false;
+        },
+        onError: (errors) => {
+            setErrors(errors);
+        },
     });
 });
 </script>

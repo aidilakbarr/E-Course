@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Symfony\Component\HttpFoundation\Response;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class VerifyJwtSession
 {
@@ -12,20 +13,22 @@ class VerifyJwtSession
     {
         $token = session('jwt_token');
 
-        if (!$token) {
+        if (! $token) {
             return redirect('/auth/login');
         }
 
         try {
             $user = JWTAuth::setToken($token)->authenticate();
-            if (!$user) {
+            if (! $user) {
                 session()->forget('jwt_token');
+
                 return redirect('/login');
             }
 
-            auth()->setUser($user); 
+            auth()->setUser($user);
         } catch (\Exception $e) {
             session()->forget('jwt_token');
+
             return redirect('/auth/login');
         }
 

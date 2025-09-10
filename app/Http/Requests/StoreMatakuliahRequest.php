@@ -64,5 +64,4 @@ class StoreMatakuliahRequest extends FormRequest
             }
         });
     }
-
 }

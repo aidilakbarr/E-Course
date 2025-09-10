@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Middleware;
+
 use Closure;
 use Exception;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class JwtAuthMiddleware
 {
@@ -16,14 +17,13 @@ class JwtAuthMiddleware
 
             $token = $request->bearerToken();
 
-
-            if (!$token || trim($token) === '') {
+            if (! $token || trim($token) === '') {
                 throw new Exception('Token tidak ditemukan di Authorization header.');
             }
 
             $user = JWTAuth::setToken($token)->authenticate();
 
-            if (!$user) {
+            if (! $user) {
                 throw new Exception('User tidak valid');
             }
 

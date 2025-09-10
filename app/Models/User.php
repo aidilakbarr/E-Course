@@ -13,8 +13,11 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
+
     protected $keyType = 'string';
+
     protected $table = 'users';
+
     protected $fillable = [
         'name',
         'profile',
@@ -22,9 +25,11 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'role',
     ];
+
     protected $hidden = [
         'password',
     ];
+
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
@@ -49,7 +54,7 @@ class User extends Authenticatable implements JWTSubject
     public function getProfileUrlAttribute()
     {
         return $this->profile
-            ? asset('storage/' . $this->profile)
+            ? asset('storage/'.$this->profile)
             : default_profile_image();
     }
 
@@ -57,6 +62,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->getKey();
     }
+
     public function getJWTCustomClaims()
     {
         return [];
@@ -65,23 +71,25 @@ class User extends Authenticatable implements JWTSubject
     public function scopeByRole($query)
     {
         $user = auth()->user();
+
         return $user->isAdmin()
             ? $query
             : $query->where('instructor_id', $user->id);
     }
+
     public function scopeFilter($query, array $filters)
     {
         return $query->when(
             filled($filters['role'] ?? null) && RoleEnum::tryFrom($filters['role']),
-            fn($q) => $q->where('role', RoleEnum::from($filters['role']))
+            fn ($q) => $q->where('role', RoleEnum::from($filters['role']))
         );
     }
 
-
     public function scopeSearch($query, $keyword)
     {
-        if (!$keyword)
+        if (! $keyword) {
             return $query;
+        }
 
         return $query->where(function ($q) use ($keyword) {
             $q->where('name', 'like', "%{$keyword}%")
@@ -94,6 +102,4 @@ class User extends Authenticatable implements JWTSubject
                 });
         });
     }
-
-
 }

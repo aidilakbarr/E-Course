@@ -26,7 +26,7 @@ class MatakuliahController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => $matakuliah
+            'data' => $matakuliah,
         ], 200);
     }
 
@@ -38,6 +38,7 @@ class MatakuliahController extends Controller
         try {
             $data = $request->validated();
             $matakuliah = Matakuliah::create($data);
+
             return response()->json([
                 'success' => true,
                 'data' => $matakuliah,
@@ -50,6 +51,7 @@ class MatakuliahController extends Controller
             ], 422);
         } catch (\Throwable $e) {
             report($e);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menyimpan course',
@@ -65,7 +67,7 @@ class MatakuliahController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => $matakuliah
+            'data' => $matakuliah,
         ]);
     }
 
@@ -78,8 +80,8 @@ class MatakuliahController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => "Matakuliah berhasil di edit",
-            'matakuliah' => $matakuliah
+            'message' => 'Matakuliah berhasil di edit',
+            'matakuliah' => $matakuliah,
         ]);
     }
 
@@ -89,9 +91,10 @@ class MatakuliahController extends Controller
     public function destroy(Matakuliah $matakuliah)
     {
         $matakuliah->delete();
+
         return response()->json([
             'success' => true,
-            'message' => "Matakuliah berhasil dihapus"
+            'message' => 'Matakuliah berhasil dihapus',
         ]);
     }
 }

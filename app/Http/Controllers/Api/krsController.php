@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -18,7 +19,7 @@ class KrsController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $data
+            'data' => $data,
         ]);
     }
 
@@ -45,7 +46,6 @@ class KrsController extends Controller
         ]);
     }
 
-
     public function terpilih()
     {
         $mahasiswaId = Auth::user()->mahasiswa->id;
@@ -67,14 +67,13 @@ class KrsController extends Controller
                             'jam_mulai' => $matkul->jam_mulai,
                             'jam_selesai' => $matkul->jam_selesai,
                         ];
-                    })
+                    }),
                 ];
             });
 
-
         return response()->json([
             'success' => true,
-            'data' => $data
+            'data' => $data,
         ]);
     }
 
@@ -86,7 +85,7 @@ class KrsController extends Controller
             ->where('status', 'DRAFT')
             ->first();
 
-        if (!$krs || $krs->matakuliahs()->count() === 0) {
+        if (! $krs || $krs->matakuliahs()->count() === 0) {
             return response()->json([
                 'success' => false,
                 'message' => 'KRS belum memiliki mata kuliah yang dipilih.',
@@ -103,33 +102,34 @@ class KrsController extends Controller
         ]);
     }
 
-
     public function destroy(Krs $krs, Matakuliah $matakuliah)
     {
         $krs->matakuliahs()->detach($matakuliah->id);
 
         return response()->json([
             'success' => true,
-            'message' => 'Matakuliah berhasil dihapus dari KRS.'
+            'message' => 'Matakuliah berhasil dihapus dari KRS.',
         ]);
     }
 
     public function krs_pdf($krsId)
     {
         GenerateKrsPdf::dispatch((int) $krsId);
+
         return response()->json(['message' => 'Sedang diproses.']);
     }
 
     public function download_pdf($krsId)
     {
         $krs = Krs::findOrFail($krsId);
-        if (!$krs->pdf_generated) {
+        if (! $krs->pdf_generated) {
             return response()->json(['ready' => false], 202);
         }
-        $filePath = 'pdf/krs_' . $krs->id . '.pdf';
-        if (!Storage::disk('public')->exists($filePath)) {
+        $filePath = 'pdf/krs_'.$krs->id.'.pdf';
+        if (! Storage::disk('public')->exists($filePath)) {
             return response()->json(['error' => 'PDF belum tersedia.'], 404);
         }
-        return response()->file(storage_path('app/public/' . $filePath));
+
+        return response()->file(storage_path('app/public/'.$filePath));
     }
 }

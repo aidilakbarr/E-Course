@@ -54,6 +54,85 @@
                         </thead>
 
                         <tbody>
+                            <tr class="animate-pulse" v-if="loading">
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                            </tr>
+                            <tr class="animate-pulse" v-if="loading">
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                            </tr>
+                            <tr class="animate-pulse" v-if="loading">
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <div class="h-4 bg-gray-300 rounded"></div>
+                                </td>
+                            </tr>
+
                             <tr
                                 v-for="matakuliah in matakuliahs.data"
                                 :key="matakuliah.id"
@@ -152,42 +231,51 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { Link, router } from "@inertiajs/vue3";
 import AdminLayout from "../../../Layouts/AdminLayout.vue";
+import axios from "axios";
 
-const props = defineProps({
-    matakuliahs: Object,
-    filters: Object,
+const matakuliahs = ref({
+    data: [],
+    current_page: 1,
+    last_page: 1,
 });
+const search = ref("");
+const loading = ref(true);
 
-const search = ref(props.filters?.search || "");
+const fetchData = async (page = 1) => {
+    loading.value = true;
+    matakuliahs.value = { data: [""], current_page: 1, last_page: 1 };
+
+    try {
+        const res = await axios.get("/api/matakuliah", {
+            params: {
+                page,
+                search: search.value,
+            },
+        });
+        matakuliahs.value = res.data.data;
+    } catch (error) {
+        console.error("Gagal fetch data:", error);
+    } finally {
+        loading.value = false;
+    }
+};
 
 const handleSearch = () => {
-    router.get(
-        "/matakuliah",
-        { search: search.value },
-        { preserveState: true, replace: true }
-    );
+    fetchData(1);
 };
 
 const prevPage = () => {
-    if (props.matakuliahs.current_page > 1) {
-        router.get(
-            "/matakuliah",
-            { page: props.matakuliahs.current_page - 1, search: search.value },
-            { preserveState: true }
-        );
+    if (matakuliahs.value.current_page > 1) {
+        fetchData(matakuliahs.value.current_page - 1);
     }
 };
 
 const nextPage = () => {
-    if (props.matakuliahs.current_page < props.matakuliahs.last_page) {
-        router.get(
-            "/matakuliah",
-            { page: props.matakuliahs.current_page + 1, search: search.value },
-            { preserveState: true }
-        );
+    if (matakuliahs.value.current_page < matakuliahs.value.last_page) {
+        fetchData(matakuliahs.value.current_page + 1);
     }
 };
 
@@ -210,4 +298,7 @@ const handleDelete = (id, name) => {
         }
     });
 };
+onMounted(() => {
+    fetchData();
+});
 </script>

@@ -6,8 +6,5 @@ use Illuminate\Http\Request;
 
 class SendEmailController extends Controller
 {
-    public function store(Request $request)
-    {
-
-    }
+    public function store(Request $request) {}
 }
