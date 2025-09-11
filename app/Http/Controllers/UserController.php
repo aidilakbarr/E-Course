@@ -56,7 +56,6 @@ class UserController extends Controller
             return redirect()->route('users.index')->with('success', 'Berhasil menambahkan user');
         } catch (\Throwable $th) {
             DB::rollBack();
-
             return handleError($th);
         }
     }
@@ -68,11 +67,11 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        $user = $this->userRepository->findWithRelations($user->id);
+        $userNow = $this->userRepository->findWithMahasiswaAndDosen($user->id);
 
         return Inertia::render(
             'admin/users/edit',
-            $user
+            $userNow
         );
     }
 
@@ -90,12 +89,12 @@ class UserController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             dd($th->getMessage(), $th->getFile(), $th->getLine());
-
             return redirect()->back()
                 ->withInput()
                 ->with('error', 'Terjadi kesalahan, silakan coba lagi.');
         }
     }
+
 
     public function destroy(User $user)
     {
@@ -113,8 +112,7 @@ class UserController extends Controller
             return back()->with('success', 'User berhasil dihapus');
         } catch (\Throwable $e) {
             report($e);
-
-            return redirect()->back()->with('error', 'Gagal menghapus user: '.$e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menghapus user: ' . $e->getMessage());
         }
     }
 
@@ -127,7 +125,7 @@ class UserController extends Controller
             $user->name = $data['name'];
             $user->email = $data['email'];
 
-            if (! empty($data['password'])) {
+            if (!empty($data['password'])) {
                 $user->password = Hash::make($data['password']);
             }
 
@@ -145,15 +143,14 @@ class UserController extends Controller
             return redirect()->back()->with('success', 'Profil berhasil diedit');
         } catch (\Throwable $e) {
             report($e);
-
-            return redirect()->back()->with('error', 'Gagal mengedit user: '.$e->getMessage());
+            return redirect()->back()->with('error', 'Gagal mengedit user: ' . $e->getMessage());
         }
     }
 
     public function importMahasiswa(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv',
+            'file' => 'required|mimes:xlsx,xls,csv'
         ]);
 
         $path = $request->file('file')->store('imports');
@@ -163,7 +160,7 @@ class UserController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Proses import sedang berjalan. Anda akan mendapat notifikasi setelah selesai.',
+                'message' => "Proses import sedang berjalan. Anda akan mendapat notifikasi setelah selesai."
             ], 200);
         } catch (\Throwable $e) {
             return response()->json([
@@ -172,4 +169,5 @@ class UserController extends Controller
             ], 500);
         }
     }
+
 }

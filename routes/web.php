@@ -16,7 +16,6 @@ Route::prefix('auth')->middleware('guest')->controller(AuthController::class)->g
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::post('/import-user', [userController::class, 'importMahasiswa']);
     Route::post('/edit-user', [userController::class, 'updateProfile']);
     Route::resource('users', UserController::class)->except(['show']);
@@ -27,7 +26,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{krs}/matakuliah/{matakuliah}', [KrsController::class, 'destroy'])->name('krs.destroy');
         Route::get('/{krsId}/generate-pdf', [KrsController::class, 'krs_pdf']);
         Route::get('/{krsId}/download-pdf', [KrsController::class, 'download_pdf']);
+        Route::get('/submitted', [KrsController::class, 'submitted']);
+        Route::put('/{krsId}/accept', [KrsController::class, 'accept']);
     });
     Route::resource('matakuliah', MatakuliahController::class)->except('show');
     Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 });

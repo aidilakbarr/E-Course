@@ -210,16 +210,19 @@
                         <label class="block text-sm text-gray-600"
                             >Ruangan</label
                         >
-                        <input
+                        <select
                             v-model="ruangan"
-                            type="text"
                             class="w-full px-5 py-2 bg-gray-200 rounded"
-                        />
+                        >
+                            <option disabled value="">Pilih Ruangan</option>
+                            <option v-for="i in 5" :key="i" :value="`R${i}`">
+                                R{{ i }}
+                            </option>
+                        </select>
                         <span class="text-red-500 text-sm mt-1">
                             {{ errors.ruangan }}
                         </span>
                     </div>
-
                     <!-- Submit -->
                     <div class="mt-6">
                         <button

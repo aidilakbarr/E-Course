@@ -97,17 +97,18 @@
                     </li>
                     <li v-if="userRole === 'ADMIN'">
                         <Link
-                            href="/dosen"
+                            href="/krs/submitted"
                             :class="[
                                 'block text-black px-4 py-2 hover:bg-gray-100',
-                                isActive('/dosen')
+                                isActive('/krs/submitted')
                                     ? 'bg-gray-200 font-bold'
                                     : '',
                             ]"
                         >
-                            Dosen Pengampu
+                            Krs Mahasiswa
                         </Link>
                     </li>
+                    K
                 </ul>
             </div>
 
@@ -141,11 +142,9 @@ import { useActive } from "../composables/useActive";
 
 const page = usePage();
 const userRole = computed(() => page.props.authUser?.role ?? null);
-console.log(userRole);
 
 const akademikOpen = ref(false);
 const sidebarVisible = ref(true);
 
-// gunakan composable
 const isActive = useActive();
 </script>

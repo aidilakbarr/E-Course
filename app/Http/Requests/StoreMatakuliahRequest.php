@@ -58,7 +58,6 @@ class StoreMatakuliahRequest extends FormRequest
                         });
                 })
                 ->exists();
-
             if ($bentrok) {
                 $validator->errors()->add('day', 'Jadwal bentrok dengan mata kuliah lain di ruangan ini.');
             }

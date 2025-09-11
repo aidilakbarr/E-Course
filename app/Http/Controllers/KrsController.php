@@ -18,7 +18,7 @@ class KrsController extends Controller
     {
         $mahasiswaId = Auth::user()->mahasiswa->id;
 
-        $matakuliah = MataKuliah::all()->map(fn ($matkul) => [
+        $matakuliah = MataKuliah::all()->map(fn($matkul) => [
             'id' => $matkul->id,
             'kode' => $matkul->kode,
             'nama' => $matkul->nama,
@@ -31,14 +31,14 @@ class KrsController extends Controller
 
         $krs = Krs::with('matakuliahs')
             ->where('mahasiswa_id', $mahasiswaId)
-            ->where('status', 'DRAFT')
+            ->whereIn('status', ['DRAFT', 'SUBMITTED'])
             ->first();
 
         return Inertia::render('public/krs/index', [
             'matakuliah' => $matakuliah,
             'krs' => $krs ? [
                 'id' => $krs->id,
-                'matakuliahs' => $krs->matakuliahs->map(fn ($matkul) => [
+                'matakuliahs' => $krs->matakuliahs->map(fn($matkul) => [
                     'id' => $matkul->id,
                     'kode' => $matkul->kode,
                     'nama' => $matkul->nama,
@@ -49,6 +49,7 @@ class KrsController extends Controller
                     'jam_selesai' => $matkul->jam_selesai,
                 ]),
             ] : null,
+            'status' => $krs->status
         ]);
     }
 
@@ -115,16 +116,59 @@ class KrsController extends Controller
     {
         $krs = Krs::findOrFail($krsId);
 
-        if (! $krs->pdf_generated) {
+        if (!$krs->pdf_generated) {
             return response()->json(['ready' => false], 202);
         }
 
-        $filePath = 'pdf/krs_'.$krs->id.'.pdf';
+        $filePath = 'pdf/krs_' . $krs->id . '.pdf';
 
-        if (! Storage::disk('public')->exists($filePath)) {
+        if (!Storage::disk('public')->exists($filePath)) {
             return response()->json(['error' => 'PDF belum tersedia.'], 404);
         }
 
-        return response()->file(storage_path('app/public/'.$filePath));
+        return response()->file(storage_path('app/public/' . $filePath));
     }
+
+    public function submitted(Request $request)
+    {
+        $query = Krs::with(['mahasiswa.user', 'matakuliahs'])
+            ->whereIn('status', ['SUBMITTED', 'ACCEPTED']);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('mahasiswa.user', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            })
+                ->orWhereHas('mahasiswa', function ($q) use ($search) {
+                    $q->where('nim', 'like', "%{$search}%");
+                });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $krs = $query->paginate(10)->withQueryString();
+
+        return Inertia::render('admin/krs/index', [
+            'krs' => $krs,
+            'filters' => $request->only(['search', 'status']),
+        ]);
+    }
+
+    public function accept($krsId)
+    {
+        $krs = Krs::with('matakuliahs')
+            ->where('id', $krsId)
+            ->where('status', 'SUBMITTED')
+            ->firstOrFail();
+
+        $krs->status = 'ACCEPTED';
+        $krs->save();
+
+        return redirect()->back()
+            ->with('success', 'KRS berhasil diterima.');
+    }
+
 }

@@ -133,7 +133,17 @@
                     class="flex justify-between items-center mt-4 text-sm text-gray-700"
                 >
                     <div>{{ krsTersimpan.length }} kelas tersimpan</div>
+
                     <button
+                        v-if="props.status == 'SUBMITTED'"
+                        @click="simpanKRS"
+                        disabled
+                        class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                        KRS Tersimpan
+                    </button>
+                    <button
+                        v-else
                         @click="simpanKRS"
                         class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700"
                     >
@@ -161,7 +171,6 @@ const dataMatkul = computed(() => {
     const idsTersimpan = krsTersimpan.value.map((m) => m.id);
     return props.matakuliah?.filter((m) => !idsTersimpan.includes(m.id));
 });
-
 const totalSKS = computed(() =>
     krsTersimpan.value.reduce((acc, m) => acc + (m.sks || 0), 0)
 );
@@ -245,7 +254,7 @@ function simpanDraft() {
 }
 
 function simpanKRS() {
-    router.put("/store", { status: "SUBMITTED" });
+    router.put("/krs/submit");
 }
 
 function hapusMatkul(matakuliahId) {
