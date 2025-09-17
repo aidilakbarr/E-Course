@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\RoleEnum;
 use App\Http\Requests\UpdateProfileRequest;
 use App\Http\Requests\UserStoreRequest;
+use App\Jobs\ImportUsersJob;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Services\FileUploadService;
@@ -17,7 +18,6 @@ use Inertia\Inertia;
 class UserController extends Controller
 {
     protected UserService $userService;
-
     protected UserRepository $userRepository;
 
     public function __construct(UserService $userService, UserRepository $userRepository)
@@ -28,25 +28,29 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->query('search');
-        $users = $this->userRepository->searchAndPaginate($search);
+        try {
+            $search = $request->query('search');
+            $users = $this->userRepository->searchAndPaginate($search);
 
-        return Inertia::render('admin/users/index', [
-            'users' => $users,
-            'filters' => ['search' => $search],
-        ]);
+            return Inertia::render('admin/users/index', [
+                'users' => $users,
+                'filters' => ['search' => $search],
+            ]);
+        } catch (\Throwable $th) {
+            return handleError($th);
+        }
     }
 
     public function create()
     {
         return Inertia::render('admin/users/create');
-
     }
 
     public function store(UserStoreRequest $request)
     {
         try {
             $data = $request->validated();
+
             if ($request->hasFile('profile')) {
                 $data['profile'] = $request->file('profile');
             }
@@ -58,11 +62,6 @@ class UserController extends Controller
             DB::rollBack();
             return handleError($th);
         }
-    }
-
-    public function show(string $id)
-    {
-        //
     }
 
     public function edit(User $user)
@@ -79,6 +78,7 @@ class UserController extends Controller
     {
         try {
             $data = $request->validated();
+
             if ($request->hasFile('profile')) {
                 $data['profile'] = $request->file('profile');
             }
@@ -88,10 +88,7 @@ class UserController extends Controller
             return redirect()->route('users.index')->with('success', 'Berhasil mengedit user');
         } catch (\Throwable $th) {
             DB::rollBack();
-            dd($th->getMessage(), $th->getFile(), $th->getLine());
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Terjadi kesalahan, silakan coba lagi.');
+            return handleError($th);
         }
     }
 
@@ -102,17 +99,14 @@ class UserController extends Controller
             if ($user->role === RoleEnum::ADMIN || $user->id === auth()->id()) {
                 return back()->with('error', 'Tidak punya akses untuk menghapus user ini');
             }
-
             if ($user->profile) {
                 FileUploadService::deleteFile($user->profile);
             }
-
             $this->userRepository->delete($user);
-
             return back()->with('success', 'User berhasil dihapus');
-        } catch (\Throwable $e) {
-            report($e);
-            return redirect()->back()->with('error', 'Gagal menghapus user: ' . $e->getMessage());
+        } catch (\Throwable $th) {
+            report($th);
+            return handleError($th);
         }
     }
 
@@ -121,12 +115,11 @@ class UserController extends Controller
         try {
             $user = $request->user();
             $data = $request->validated();
-
             $user->name = $data['name'];
             $user->email = $data['email'];
 
             if (!empty($data['password'])) {
-                $user->password = Hash::make($data['password']);
+                $user->password = $data['password'];
             }
 
             if ($request->hasFile('profile')) {
@@ -137,36 +130,24 @@ class UserController extends Controller
             }
 
             $user->save();
-
-            auth()->setUser(($user));
-
             return redirect()->back()->with('success', 'Profil berhasil diedit');
-        } catch (\Throwable $e) {
-            report($e);
-            return redirect()->back()->with('error', 'Gagal mengedit user: ' . $e->getMessage());
+        } catch (\Throwable $th) {
+            report($th);
+            return handleError($th);
         }
     }
 
-    public function importMahasiswa(Request $request)
+    public function import(Request $request)
     {
         $request->validate([
             'file' => 'required|mimes:xlsx,xls,csv'
         ]);
-
         $path = $request->file('file')->store('imports');
-
         try {
             ImportUsersJob::dispatch($path);
-
-            return response()->json([
-                'success' => true,
-                'message' => "Proses import sedang berjalan. Anda akan mendapat notifikasi setelah selesai."
-            ], 200);
-        } catch (\Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 500);
+            return redirect()->back()->with('success', 'Import Berhasil');
+        } catch (\Throwable $th) {
+            return handleError($th);
         }
     }
 

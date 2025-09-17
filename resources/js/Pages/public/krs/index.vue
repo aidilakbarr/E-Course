@@ -135,7 +135,7 @@
                     <div>{{ krsTersimpan.length }} kelas tersimpan</div>
 
                     <button
-                        v-if="props.status == 'SUBMITTED'"
+                        v-if="props?.status == 'SUBMITTED'"
                         @click="simpanKRS"
                         disabled
                         class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
@@ -248,7 +248,7 @@ function simpanDraft() {
         return;
     }
 
-    router.post("/krs/store", {
+    router.post("/krs", {
         matakuliah_ids: selectedMatkul.value,
     });
 }

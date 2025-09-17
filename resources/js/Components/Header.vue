@@ -14,7 +14,13 @@
                     class="relative z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none"
                 >
                     <img
-                        :src="`/storage/${authUser.profile}`"
+                        :src="
+                            authUser.profile
+                                ? `/storage/${authUser.profile}`
+                                : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                                      authUser.name
+                                  )}&background=random&color=fff`
+                        "
                         alt="User Profile"
                     />
                 </button>
@@ -66,7 +72,7 @@ const openProfile = () => {
 };
 
 const handleUpdateProfile = (data) => {
-    router.post("edit-user", data);
+    router.post("edit", data);
 };
 
 const handleLogout = () => {

@@ -70,28 +70,28 @@
                     v-show="akademikOpen"
                     class="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-md shadow-lg z-10"
                 >
-                    <li>
+                    <li v-if="userRole !== 'DOSEN'">
                         <Link
                             :href="
-                                userRole === 'ADMIN'
-                                    ? '/matakuliah'
-                                    : '/krs/set_krs_mhs'
+                                userRole === 'ADMIN' ? '/matakuliah' : '/krs'
                             "
                             :class="[
                                 'block text-black px-4 py-2 hover:bg-gray-100',
                                 isActive(
                                     userRole === 'ADMIN'
                                         ? '/matakuliah'
-                                        : '/krs/set_krs_mhs'
+                                        : '/krs'
                                 )
                                     ? 'bg-gray-200 font-bold'
                                     : '',
                             ]"
                         >
                             {{
-                                userRole === "ADMIN"
+                                userRole === "ADMIN" || userRole === "KAPRODI"
                                     ? "Mata Kuliah"
-                                    : "Penawaran KRS"
+                                    : userRole === "MAHASISWA"
+                                    ? "Penawaran KRS"
+                                    : null
                             }}
                         </Link>
                     </li>
@@ -108,7 +108,54 @@
                             Krs Mahasiswa
                         </Link>
                     </li>
-                    K
+                    <li v-if="userRole === 'DOSEN'">
+                        <Link
+                            href="/dosen/jadwal"
+                            :class="[
+                                'block text-black px-4 py-2 hover:bg-gray-100',
+                                isActive('/dosen/jadwal')
+                                    ? 'bg-gray-200 font-bold'
+                                    : '',
+                            ]"
+                        >
+                            Jadwal Mengajar
+                        </Link>
+                    </li>
+                    <li v-if="userRole === 'MAHASISWA'">
+                        <Link
+                            href="/mahasiswa/jadwal"
+                            :class="[
+                                'block text-black px-4 py-2 hover:bg-gray-100',
+                                isActive('/mahasiswa/jadwal')
+                                    ? 'bg-gray-200 font-bold'
+                                    : '',
+                            ]"
+                        >
+                            Jadwal Kuliah
+                        </Link>
+                        <Link
+                            href="/mahasiswa/khs"
+                            :class="[
+                                'block text-black px-4 py-2 hover:bg-gray-100',
+                                isActive('/mahasiswa/khs')
+                                    ? 'bg-gray-200 font-bold'
+                                    : '',
+                            ]"
+                        >
+                            Khs
+                        </Link>
+                        <Link
+                            href="/mahasiswa/transkrip"
+                            :class="[
+                                'block text-black px-4 py-2 hover:bg-gray-100',
+                                isActive('/mahasiswa/transkrip')
+                                    ? 'bg-gray-200 font-bold'
+                                    : '',
+                            ]"
+                        >
+                            Transkrip
+                        </Link>
+                    </li>
                 </ul>
             </div>
 

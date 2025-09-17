@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class MahasiswaController extends Controller
 {
@@ -12,7 +13,7 @@ class MahasiswaController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('public/jadwal/index');
     }
 
     /**

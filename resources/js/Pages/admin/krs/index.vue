@@ -71,8 +71,8 @@
                                     </td>
                                     <td class="p-3">
                                         <span
-                                            :class="statusBadge(item.status)"
-                                            >{{ item.status }}</span
+                                            :class="statusBadge(item?.status)"
+                                            >{{ item?.status }}</span
                                         >
                                     </td>
                                     <td class="p-3">
@@ -91,7 +91,7 @@
                                                     )
                                                 "
                                                 :disabled="
-                                                    item.status === 'ACCEPTED'
+                                                    item?.status === 'ACCEPTED'
                                                 "
                                                 class="px-3 py-1 rounded bg-green-600 text-white disabled:opacity-50"
                                             >
@@ -105,7 +105,7 @@
                                                     )
                                                 "
                                                 :disabled="
-                                                    item.status === 'REJECTED'
+                                                    item?.status === 'REJECTED'
                                                 "
                                                 class="px-3 py-1 rounded bg-red-600 text-white disabled:opacity-50"
                                             >

@@ -13,162 +13,175 @@ use Inertia\Inertia;
 
 class KrsController extends Controller
 {
-    // Menampilkan halaman KRS
     public function index()
     {
-        $mahasiswaId = Auth::user()->mahasiswa->id;
-
-        $matakuliah = MataKuliah::all()->map(fn($matkul) => [
-            'id' => $matkul->id,
-            'kode' => $matkul->kode,
-            'nama' => $matkul->nama,
-            'sks' => $matkul->sks,
-            'semester' => $matkul->semester,
-            'hari' => $matkul->hari,
-            'jam_mulai' => $matkul->jam_mulai,
-            'jam_selesai' => $matkul->jam_selesai,
-        ]);
-
-        $krs = Krs::with('matakuliahs')
-            ->where('mahasiswa_id', $mahasiswaId)
-            ->whereIn('status', ['DRAFT', 'SUBMITTED'])
-            ->first();
-
-        return Inertia::render('public/krs/index', [
-            'matakuliah' => $matakuliah,
-            'krs' => $krs ? [
-                'id' => $krs->id,
-                'matakuliahs' => $krs->matakuliahs->map(fn($matkul) => [
-                    'id' => $matkul->id,
-                    'kode' => $matkul->kode,
-                    'nama' => $matkul->nama,
-                    'sks' => $matkul->sks,
-                    'semester' => $matkul->semester,
-                    'hari' => $matkul->hari,
-                    'jam_mulai' => $matkul->jam_mulai,
-                    'jam_selesai' => $matkul->jam_selesai,
-                ]),
-            ] : null,
-            'status' => $krs->status
-        ]);
+        try {
+            $mahasiswaId = Auth::user()->mahasiswa->id;
+            $matakuliah = MataKuliah::all();
+            $krs = Krs::with('matakuliahs')
+                ->where('mahasiswa_id', $mahasiswaId)
+                ->whereIn('status', ['DRAFT', 'SUBMITTED'])
+                ->first();
+            // dd($krs);
+            return Inertia::render('public/krs/index', [
+                'matakuliah' => $matakuliah,
+                'krs' => $krs ? [
+                    'id' => $krs->id,
+                    'matakuliahs' => $krs->matakuliahs->map(fn($matkul) => [
+                        'id' => $matkul->id,
+                        'kode' => $matkul->kode,
+                        'nama' => $matkul->nama,
+                        'sks' => $matkul->sks,
+                        'semester' => $matkul->semester,
+                        'hari' => $matkul->hari,
+                        'jam_mulai' => $matkul->jam_mulai,
+                        'jam_selesai' => $matkul->jam_selesai,
+                    ]),
+                ] : null,
+                'status' => $krs?->status
+            ]);
+        } catch (\Throwable $th) {
+            return handleError($th);
+        }
     }
 
-    // Simpan KRS sebagai draft
     public function store(Request $request)
     {
-        $request->validate([
-            'matakuliah_ids' => 'required|array',
-            'matakuliah_ids.*' => 'exists:mata_kuliahs,id',
-        ]);
-
-        $mahasiswa = Mahasiswa::where('user_id', auth()->id())->firstOrFail();
-
-        $krs = Krs::firstOrCreate([
-            'mahasiswa_id' => $mahasiswa->id,
-            'status' => 'DRAFT',
-        ]);
-
-        $krs->matakuliahs()->syncWithoutDetaching($request->matakuliah_ids);
-
-        return redirect()->back()
-            ->with('success', 'KRS berhasil disimpan sebagai draft.');
+        try {
+            $request->validate([
+                'matakuliah_ids' => 'required|array',
+                'matakuliah_ids.*' => 'exists:mata_kuliahs,id',
+            ]);
+            $mahasiswa = Mahasiswa::where('user_id', auth()->id())->firstOrFail();
+            $krs = Krs::firstOrCreate([
+                'mahasiswa_id' => $mahasiswa->id,
+                'status' => 'DRAFT',
+            ]);
+            $krs->matakuliahs()->syncWithoutDetaching($request->matakuliah_ids);
+            return redirect()->back()
+                ->with('success', 'KRS berhasil disimpan sebagai draft.');
+        } catch (\Throwable $th) {
+            return handleError($th);
+        }
     }
 
-    // Submit KRS
     public function submit(Request $request)
     {
-        $mahasiswa = Mahasiswa::where('user_id', auth()->id())->firstOrFail();
-
-        $krs = Krs::with('matakuliahs')
-            ->where('mahasiswa_id', $mahasiswa->id)
-            ->where('status', 'DRAFT')
-            ->firstOrFail();
-
-        if ($krs->matakuliahs->isEmpty()) {
+        try {
+            $mahasiswa = Mahasiswa::where('user_id', auth()->id())->firstOrFail();
+            $krs = Krs::with('matakuliahs')
+                ->where('mahasiswa_id', $mahasiswa->id)
+                ->where('status', 'DRAFT')
+                ->firstOrFail();
+            if ($krs->matakuliahs->isEmpty()) {
+                return redirect()->back()
+                    ->with('error', 'KRS belum memiliki mata kuliah yang dipilih.');
+            }
+            $krs->status = 'SUBMITTED';
+            $krs->save();
             return redirect()->back()
-                ->with('error', 'KRS belum memiliki mata kuliah yang dipilih.');
+                ->with('success', 'KRS berhasil disubmit.');
+        } catch (\Throwable $th) {
+            return handleError($th);
         }
-
-        $krs->status = 'SUBMITTED';
-        $krs->save();
-
-        return redirect()->back()
-            ->with('success', 'KRS berhasil disubmit.');
     }
 
-    // Hapus matakuliah dari KRS
     public function destroy(Krs $krs, MataKuliah $matakuliah)
     {
-        $krs->matakuliahs()->detach($matakuliah->id);
-
-        return redirect()->back()
-            ->with('success', 'Matakuliah berhasil dihapus dari KRS.');
+        try {
+            $krs->matakuliahs()->detach($matakuliah->id);
+            return redirect()->back()
+                ->with('success', 'Matakuliah berhasil dihapus dari KRS.');
+        } catch (\Throwable $th) {
+            return handleError($th);
+        }
     }
 
     public function krs_pdf($krsId)
     {
-        GenerateKrsPdf::dispatch((int) $krsId);
-
-        return back()->with('success', 'PDF sedang diproses...');
+        try {
+            GenerateKrsPdf::dispatch((int) $krsId);
+            return back()->with('success', 'PDF sedang diproses...');
+        } catch (\Throwable $th) {
+            return handleError($th);
+        }
     }
 
     public function download_pdf($krsId)
     {
-        $krs = Krs::findOrFail($krsId);
-
-        if (!$krs->pdf_generated) {
-            return response()->json(['ready' => false], 202);
+        try {
+            $krs = Krs::findOrFail($krsId);
+            if (!$krs->pdf_generated) {
+                return response()->json(['ready' => false], 202);
+            }
+            $filePath = 'pdf/krs_' . $krs->id . '.pdf';
+            if (!Storage::disk('public')->exists($filePath)) {
+                return response()->json(['error' => 'PDF belum tersedia.'], 404);
+            }
+            return response()->file(storage_path('app/public/' . $filePath));
+        } catch (\Throwable $th) {
+            return handleError($th);
         }
-
-        $filePath = 'pdf/krs_' . $krs->id . '.pdf';
-
-        if (!Storage::disk('public')->exists($filePath)) {
-            return response()->json(['error' => 'PDF belum tersedia.'], 404);
-        }
-
-        return response()->file(storage_path('app/public/' . $filePath));
     }
 
     public function submitted(Request $request)
     {
-        $query = Krs::with(['mahasiswa.user', 'matakuliahs'])
-            ->whereIn('status', ['SUBMITTED', 'ACCEPTED']);
+        try {
+            $query = Krs::with(['mahasiswa.user', 'matakuliahs'])
+                ->whereIn('status', ['SUBMITTED', 'ACCEPTED']);
+            if ($request->filled('search')) {
+                $search = $request->search;
+                $query->whereHas('mahasiswa.user', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                })
+                    ->orWhereHas('mahasiswa', function ($q) use ($search) {
+                        $q->where('nim', 'like', "%{$search}%");
+                    });
+            }
 
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->whereHas('mahasiswa.user', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
-            })
-                ->orWhereHas('mahasiswa', function ($q) use ($search) {
-                    $q->where('nim', 'like', "%{$search}%");
-                });
+            if ($request->filled('status')) {
+                $query->where('status', $request->status);
+            }
+            $krs = $query->paginate(10)->withQueryString();
+            return Inertia::render('admin/krs/index', [
+                'krs' => $krs,
+                'filters' => $request->only(['search', 'status']),
+            ]);
+        } catch (\Throwable $th) {
+            return handleError($th);
         }
-
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        $krs = $query->paginate(10)->withQueryString();
-
-        return Inertia::render('admin/krs/index', [
-            'krs' => $krs,
-            'filters' => $request->only(['search', 'status']),
-        ]);
     }
 
     public function accept($krsId)
     {
-        $krs = Krs::with('matakuliahs')
-            ->where('id', $krsId)
-            ->where('status', 'SUBMITTED')
-            ->firstOrFail();
-
-        $krs->status = 'ACCEPTED';
-        $krs->save();
-
-        return redirect()->back()
-            ->with('success', 'KRS berhasil diterima.');
+        try {
+            $krs = Krs::with('matakuliahs')
+                ->where('id', $krsId)
+                ->where('status', 'SUBMITTED')
+                ->firstOrFail();
+            $krs->status = 'ACCEPTED';
+            $krs->save();
+            return redirect()->back()
+                ->with('success', 'KRS berhasil diterima.');
+        } catch (\Throwable $th) {
+            return handleError($th);
+        }
     }
 
+    public function reject($krsId)
+    {
+        try {
+            $krs = Krs::with('matakuliahs')
+                ->where('id', $krsId)
+                ->where('status', 'SUBMITTED')
+                ->firstOrFail();
+            $krs->status = 'ACCEPTED';
+            $krs->save();
+            return redirect()->back()
+                ->with('success', 'KRS berhasil diterima.');
+        } catch (\Throwable $th) {
+            return handleError($th);
+        }
+    }
 }
