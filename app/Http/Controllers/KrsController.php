@@ -22,7 +22,7 @@ class KrsController extends Controller
                 ->where('mahasiswa_id', $mahasiswaId)
                 ->whereIn('status', ['DRAFT', 'SUBMITTED'])
                 ->first();
-            // dd($krs);
+
             return Inertia::render('public/krs/index', [
                 'matakuliah' => $matakuliah,
                 'krs' => $krs ? [
@@ -45,19 +45,23 @@ class KrsController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function save(Request $request)
     {
         try {
             $request->validate([
                 'matakuliah_ids' => 'required|array',
                 'matakuliah_ids.*' => 'exists:mata_kuliahs,id',
             ]);
+
+
             $mahasiswa = Mahasiswa::where('user_id', auth()->id())->firstOrFail();
-            $krs = Krs::firstOrCreate([
+
+            $krs = Krs::Create([
                 'mahasiswa_id' => $mahasiswa->id,
                 'status' => 'DRAFT',
             ]);
             $krs->matakuliahs()->syncWithoutDetaching($request->matakuliah_ids);
+
             return redirect()->back()
                 ->with('success', 'KRS berhasil disimpan sebagai draft.');
         } catch (\Throwable $th) {
@@ -73,12 +77,15 @@ class KrsController extends Controller
                 ->where('mahasiswa_id', $mahasiswa->id)
                 ->where('status', 'DRAFT')
                 ->firstOrFail();
+
             if ($krs->matakuliahs->isEmpty()) {
                 return redirect()->back()
                     ->with('error', 'KRS belum memiliki mata kuliah yang dipilih.');
             }
+
             $krs->status = 'SUBMITTED';
             $krs->save();
+
             return redirect()->back()
                 ->with('success', 'KRS berhasil disubmit.');
         } catch (\Throwable $th) {
@@ -97,32 +104,21 @@ class KrsController extends Controller
         }
     }
 
-    public function krs_pdf($krsId)
+    public function pdf(Krs $krs)
     {
         try {
-            GenerateKrsPdf::dispatch((int) $krsId);
-            return back()->with('success', 'PDF sedang diproses...');
+            $filePath = "pdf/krs_{$krs->id}.pdf";
+            if (!$krs->pdf_generated || !Storage::disk('public')->exists($filePath)) {
+                GenerateKrsPdf::dispatch($krs->id);
+                return response('', 202);
+            }
+
+            return response()->file(storage_path("app/public/{$filePath}"));
         } catch (\Throwable $th) {
             return handleError($th);
         }
     }
 
-    public function download_pdf($krsId)
-    {
-        try {
-            $krs = Krs::findOrFail($krsId);
-            if (!$krs->pdf_generated) {
-                return response()->json(['ready' => false], 202);
-            }
-            $filePath = 'pdf/krs_' . $krs->id . '.pdf';
-            if (!Storage::disk('public')->exists($filePath)) {
-                return response()->json(['error' => 'PDF belum tersedia.'], 404);
-            }
-            return response()->file(storage_path('app/public/' . $filePath));
-        } catch (\Throwable $th) {
-            return handleError($th);
-        }
-    }
 
     public function submitted(Request $request)
     {
@@ -174,12 +170,12 @@ class KrsController extends Controller
         try {
             $krs = Krs::with('matakuliahs')
                 ->where('id', $krsId)
-                ->where('status', 'SUBMITTED')
+                ->where('status', 'REJECTED')
                 ->firstOrFail();
             $krs->status = 'ACCEPTED';
             $krs->save();
             return redirect()->back()
-                ->with('success', 'KRS berhasil diterima.');
+                ->with('success', 'KRS berhasil ditolak.');
         } catch (\Throwable $th) {
             return handleError($th);
         }

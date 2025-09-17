@@ -191,21 +191,14 @@ async function downloadPDF() {
     if (isDownloading.value) return;
     isDownloading.value = true;
     try {
-        await axios.get(`/krs/${props.krs?.id}/generate-pdf`, {
-            withCredentials: true,
-        });
-
         const intervalId = setInterval(async () => {
             try {
-                const response = await axios.get(
-                    `/krs/${props.krs?.id}/download-pdf`,
-                    {
-                        responseType: "blob",
-                        validateStatus: (status) =>
-                            status === 200 || status === 202,
-                        withCredentials: true,
-                    }
-                );
+                const response = await axios.get(`/krs/${props.krs?.id}/pdf`, {
+                    responseType: "blob",
+                    validateStatus: (status) =>
+                        status === 200 || status === 202,
+                    withCredentials: true,
+                });
 
                 if (response.status === 202) {
                     return;
@@ -248,13 +241,13 @@ function simpanDraft() {
         return;
     }
 
-    router.post("/krs", {
+    router.post("/krs/save", {
         matakuliah_ids: selectedMatkul.value,
     });
 }
 
 function simpanKRS() {
-    router.put("/krs/submit");
+    router.put("/krs/store");
 }
 
 function hapusMatkul(matakuliahId) {

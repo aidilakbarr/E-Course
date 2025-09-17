@@ -33,14 +33,13 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('krs')->name('krs.')->controller(KrsController::class)->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::post('/store', 'store')->name('store');
+        Route::post('/save', 'save')->name('save');
 
         Route::get('/submitted', 'submitted');
-        Route::get('/{krsId}/generate-pdf', 'krs_pdf');
-        Route::get('/{krsId}/download-pdf', 'download_pdf');
-        Route::put('/submit', 'submit')->name('krs.submit');
+        Route::get('/{krs}/pdf', 'pdf');
+        Route::put('/store', 'store')->name('store');
         Route::delete('/{krs}/matakuliah/{matakuliah}', 'destroy');
 
-        Route::put('/{krsId}/accept', 'accept');
+        Route::put('/{krs}/accept', 'accept');
     });
 });
